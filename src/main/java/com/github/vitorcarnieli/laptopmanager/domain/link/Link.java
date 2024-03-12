@@ -2,6 +2,7 @@ package com.github.vitorcarnieli.laptopmanager.domain.link;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.laptop.Laptop;
@@ -17,10 +18,12 @@ public class Link extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "beneficiary_id")
+	@JsonIgnore
 	private Beneficiary beneficiary;
 	
 	@ManyToOne
 	@JoinColumn(name = "laptop_id")
+	@JsonIgnore
 	private Laptop laptop;
 	
 	private Date initDate;
@@ -38,6 +41,8 @@ public class Link extends BaseEntity {
 		setLaptop(laptop);
 		setBeneficiary(beneficiary);
 		setInitDate(new Date());
+		laptop.addLink(this);
+		beneficiary.addLink(this);
 	}
 	
 	public boolean isCurrent() {
@@ -49,7 +54,9 @@ public class Link extends BaseEntity {
 	}
 
 	public void setBeneficiary(Beneficiary beneficiary) {
-		this.beneficiary = beneficiary;
+		if (beneficiary.isLinked()) 
+			throw new RuntimeException("Laptop by id: " + beneficiary.getId() + " is linked.");
+		this.beneficiary = beneficiary;	
 	}
 
 	public Laptop getLaptop() {
@@ -57,6 +64,8 @@ public class Link extends BaseEntity {
 	}
 
 	public void setLaptop(Laptop laptop) {
+		if (laptop.isLinked()) 
+			throw new RuntimeException("Laptop by id: " + laptop.getId() + " is linked.");
 		this.laptop = laptop;
 	}
 

@@ -9,10 +9,9 @@ public class LinkDto extends BaseDto{
 		
 	}
 
-	public LinkDto(Long beneficiaryId, Long laptopId) {
-		super();
-		this.beneficiaryId = beneficiaryId;
-		this.laptopId = laptopId;
+	public LinkDto(Long beneficiary, Long laptop) {
+		this.beneficiaryId = beneficiary;
+		this.laptopId = laptop;
 	}
 
 	public Long getBeneficiaryId() {

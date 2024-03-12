@@ -13,5 +13,5 @@ import com.github.vitorcarnieli.laptopmanager.service.LaptopService;
 public class LaptopController extends BaseController<Laptop, LaptopDto> {
 
 	@Autowired
-	LaptopService laptopService;
+	private LaptopService laptopService;
 }

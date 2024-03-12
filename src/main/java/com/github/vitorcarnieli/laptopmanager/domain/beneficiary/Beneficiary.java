@@ -3,6 +3,7 @@ package com.github.vitorcarnieli.laptopmanager.domain.beneficiary;
 import java.util.List;
 
 import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
+import com.github.vitorcarnieli.laptopmanager.domain.laptop.Laptop;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
 import jakarta.persistence.Entity;
@@ -21,11 +22,17 @@ public class Beneficiary extends BaseEntity {
 	
 	private ContractType contractType;
 	
+	private Laptop currentLaptop;
+	
 	@OneToMany(mappedBy = "beneficiary")
 	private List<Link> links;
 
 	public Beneficiary() {
 		
+	}
+	
+	public Boolean isLinked() {
+		return links.equals(null) ?  false : links.get(links.size()-1).isCurrent();
 	}
 
 	public String getName() {
@@ -89,8 +96,9 @@ public class Beneficiary extends BaseEntity {
 	
 	public boolean addLink(Link link) {
 		if (link != null) {
-			return links.add(link);
-		}
+			links.add(link);
+			this.currentLaptop = link.getLaptop();
+		} 
 		throw new RuntimeException();
 	}
 

@@ -27,6 +27,7 @@ public class BaseService<E extends BaseEntity, D extends BaseDto> {
 
 	public List<E> findAll() throws Exception {
 		try {
+			System.out.println(baseRepository.findAll());
 			return baseRepository.findAll();
 		} catch (Exception e) {
 			throw e;
@@ -38,7 +39,7 @@ public class BaseService<E extends BaseEntity, D extends BaseDto> {
 			Optional<E> entityOptional =  baseRepository.findById(id);
 			if (entityOptional.isPresent())
 				return entityOptional.get();
-			throw new EntityNotFoundException();
+			throw new EntityNotFoundException("Entity by id: " + id + " not found");
 		} catch (Exception e) {
 			throw e;
 		}
@@ -65,6 +66,15 @@ public class BaseService<E extends BaseEntity, D extends BaseDto> {
 			E entity = entityClass.getDeclaredConstructor().newInstance();
 			System.out.println(dto);
 			BeanUtils.copyProperties(dto, entity);
+			baseRepository.save(entity);
+			return true;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public boolean save(E entity) throws Exception {
+		try {
 			baseRepository.save(entity);
 			return true;
 		} catch (Exception e) {

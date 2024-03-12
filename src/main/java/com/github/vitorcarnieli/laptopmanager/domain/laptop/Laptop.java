@@ -3,6 +3,7 @@ package com.github.vitorcarnieli.laptopmanager.domain.laptop;
 import java.util.List;
 
 import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
+import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
 import jakarta.persistence.Entity;
@@ -13,9 +14,13 @@ public class Laptop extends BaseEntity {
 
 	private static final long serialVersionUID = -1934216965515548387L;
 	
-	private String serial_number;
+	private String serialNumber;
 	
-	private String listed_number;
+	private String listedNumber;
+	
+	private LaptopModel laptopModel;
+	
+	private Beneficiary currentBeneficiary;
 	
 	@OneToMany(mappedBy = "laptop")
 	private List<Link> links;
@@ -24,23 +29,27 @@ public class Laptop extends BaseEntity {
 	
 	public Laptop() {
 	}
+	
+	public Boolean isLinked() {
+		return links.equals(null) ?  false : links.get(links.size()-1).isCurrent();
+	}
+	
+	public String getSerialNumber() {
+		return serialNumber;
+	}
 
-	public String getSerial_number() {
-		return serial_number;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
-	
-	public void setSerial_number(String serial_number) {
-		this.serial_number = serial_number;
+
+	public String getListedNumber() {
+		return listedNumber;
 	}
-	
-	public String getListed_number() {
-		return listed_number;
+
+	public void setListedNumber(String listedNumber) {
+		this.listedNumber = listedNumber;
 	}
-	
-	public void setListed_number(String listed_number) {
-		this.listed_number = listed_number;
-	}
-	
+
 	public List<Link> getLinks() {
 		return links;
 	}
@@ -51,7 +60,8 @@ public class Laptop extends BaseEntity {
 	
 	public boolean addLink(Link link) {
 		if (link != null) {
-			return links.add(link);
+			links.add(link);
+			this.currentBeneficiary = link.getBeneficiary();
 		}
 		throw new RuntimeException();
 	}
@@ -59,6 +69,22 @@ public class Laptop extends BaseEntity {
 	public static BaseEntity newInstance() {
 		return new Laptop();
 	}
-	
-	
+
+	public LaptopModel getLaptopModel() {
+		return laptopModel;
+	}
+
+	public void setLaptopModel(String laptopModel) {
+		switch (laptopModel) {
+			case "0": {
+				this.laptopModel = LaptopModel.a515_54_5526;
+				break;
+			}
+			case "1": {
+				this.laptopModel = LaptopModel.a515_54_55L0;
+				break;
+			}
+		
+		}
+	}
 }

@@ -4,17 +4,15 @@ import com.github.vitorcarnieli.laptopmanager.domain.base.BaseDto;
 
 public class LaptopDto extends BaseDto {
 	
-	private String serialNumber, listedNumber, model;
+	private String serialNumber, listedNumber, laptopModel;
 
 	public LaptopDto() {
-		super();
 	}
-
-	public LaptopDto(String serialNumber, String listedNumber, String model) {
-		super();
+	
+	public LaptopDto(String serialNumber, String listedNumber, String laptopModel) {
 		this.serialNumber = serialNumber;
 		this.listedNumber = listedNumber;
-		this.model = model;
+		this.setLaptopModel(laptopModel);
 	}
 
 	public String getSerialNumber() {
@@ -33,13 +31,16 @@ public class LaptopDto extends BaseDto {
 		this.listedNumber = listedNumber;
 	}
 
-	public String getModel() {
-		return model;
+	public String getLaptopModel() {
+		return laptopModel;
 	}
 
-	public void setModel(String model) {
-		this.model = model;
+	public void setLaptopModel(String laptopModel) {
+		this.laptopModel = laptopModel;
 	}
+
+
+	
 	
 	
 
