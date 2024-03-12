@@ -29,6 +29,13 @@ public class LinkDto extends BaseDto{
 	public void setLaptopId(Long laptopId) {
 		this.laptopId = laptopId;
 	}
+
+	@Override
+	public String toString() {
+		return "LinkDto [beneficiaryId=" + beneficiaryId + ", laptopId=" + laptopId + "]";
+	}
+	
+	
 	
 	
 }

@@ -1,5 +1,7 @@
 package com.github.vitorcarnieli.laptopmanager.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class LinkService extends BaseService<Link, LinkDto>{
 			Link link = new Link(laptop, beneficiary);
 			return this.save(link);
 		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
 			throw e;
 		}
 		

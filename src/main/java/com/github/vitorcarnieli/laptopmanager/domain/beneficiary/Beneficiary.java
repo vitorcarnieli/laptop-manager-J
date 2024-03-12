@@ -8,6 +8,7 @@ import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Beneficiary extends BaseEntity {
@@ -22,6 +23,7 @@ public class Beneficiary extends BaseEntity {
 	
 	private ContractType contractType;
 	
+	@OneToOne
 	private Laptop currentLaptop;
 	
 	@OneToMany(mappedBy = "beneficiary")
@@ -32,8 +34,9 @@ public class Beneficiary extends BaseEntity {
 	}
 	
 	public Boolean isLinked() {
-		return links.equals(null) ?  false : links.get(links.size()-1).isCurrent();
+	    return !links.isEmpty() && links.get(links.size() - 1).isCurrent();
 	}
+	
 
 	public String getName() {
 		return name;
@@ -97,7 +100,7 @@ public class Beneficiary extends BaseEntity {
 	public boolean addLink(Link link) {
 		if (link != null) {
 			links.add(link);
-			this.currentLaptop = link.getLaptop();
+			return this.setCurrentLaptop(link.getLaptop());
 		} 
 		throw new RuntimeException();
 	}
@@ -106,6 +109,15 @@ public class Beneficiary extends BaseEntity {
 	public String toString() {
 		return "Beneficiary [name=" + name + ", document=" + document + ", contactNumber=" + contactNumber
 				+ ", contractType=" + contractType + ", links=" + links + "]";
+	}
+
+	public Laptop getCurrentLaptop() {
+		return currentLaptop;
+	}
+
+	public boolean setCurrentLaptop(Laptop currentLaptop) {
+		this.currentLaptop = currentLaptop;
+		return true;
 	}
 	
 	

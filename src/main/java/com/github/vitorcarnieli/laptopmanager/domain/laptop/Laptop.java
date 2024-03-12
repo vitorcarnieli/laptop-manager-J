@@ -7,7 +7,9 @@ import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Laptop extends BaseEntity {
@@ -20,6 +22,8 @@ public class Laptop extends BaseEntity {
 	
 	private LaptopModel laptopModel;
 	
+    @OneToOne
+    @JoinColumn(name = "current_beneficiary_id")
 	private Beneficiary currentBeneficiary;
 	
 	@OneToMany(mappedBy = "laptop")
@@ -31,7 +35,7 @@ public class Laptop extends BaseEntity {
 	}
 	
 	public Boolean isLinked() {
-		return links.equals(null) ?  false : links.get(links.size()-1).isCurrent();
+	    return !links.isEmpty() && links.get(links.size() - 1).isCurrent();
 	}
 	
 	public String getSerialNumber() {
@@ -61,7 +65,7 @@ public class Laptop extends BaseEntity {
 	public boolean addLink(Link link) {
 		if (link != null) {
 			links.add(link);
-			this.currentBeneficiary = link.getBeneficiary();
+			return this.setCurrentBeneficiary(link.getBeneficiary());
 		}
 		throw new RuntimeException();
 	}
@@ -86,5 +90,14 @@ public class Laptop extends BaseEntity {
 			}
 		
 		}
+	}
+
+	public Beneficiary getCurrentBeneficiary() {
+		return currentBeneficiary;
+	}
+
+	public boolean setCurrentBeneficiary(Beneficiary currentBeneficiary) {
+		this.currentBeneficiary = currentBeneficiary;
+		return true;
 	}
 }

@@ -39,6 +39,14 @@ public class LaptopDto extends BaseDto {
 		this.laptopModel = laptopModel;
 	}
 
+	@Override
+	public String toString() {
+		return "LaptopDto [serialNumber=" + serialNumber + ", listedNumber=" + listedNumber + ", laptopModel="
+				+ laptopModel + "]";
+	}
+	
+	
+
 
 	
 	
