@@ -2,6 +2,7 @@ package com.github.vitorcarnieli.laptopmanager.domain.laptop;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
@@ -24,9 +25,11 @@ public class Laptop extends BaseEntity {
 	
     @OneToOne
     @JoinColumn(name = "current_beneficiary_id")
+	@JsonIgnore
 	private Beneficiary currentBeneficiary;
 	
 	@OneToMany(mappedBy = "laptop")
+	@JsonIgnore
 	private List<Link> links;
 	
 	

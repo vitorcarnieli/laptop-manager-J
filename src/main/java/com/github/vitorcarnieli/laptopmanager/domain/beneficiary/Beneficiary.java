@@ -2,6 +2,7 @@ package com.github.vitorcarnieli.laptopmanager.domain.beneficiary;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.laptop.Laptop;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
@@ -23,10 +24,12 @@ public class Beneficiary extends BaseEntity {
 	
 	private ContractType contractType;
 	
-	@OneToOne
+    @OneToOne(mappedBy = "currentBeneficiary")
+    @JsonIgnore
 	private Laptop currentLaptop;
 	
 	@OneToMany(mappedBy = "beneficiary")
+	@JsonIgnore
 	private List<Link> links;
 
 	public Beneficiary() {
