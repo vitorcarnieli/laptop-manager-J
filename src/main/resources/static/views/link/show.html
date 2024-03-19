@@ -11,21 +11,21 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../../application_style.css">
-    <title></title>
+    <title id="title"></title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-whitesmoke p-4 mb-1 fs-5 fw-light">
-        <a class="nlaptopavbar-brand text-black text-decoration-none me-4">Página Inicial <i class="bi bi-house"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Alterna navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+                <a class="nav-item nav-link me-4" href="../../index.html">Página Inicial <i class="bi bi-house"></i></a>   
                 <a class="nav-item nav-link me-4" href="../beneficiary/index.html">Beneficiários <i class="bi bi-person"></i></a>
                 <a class="nav-item nav-link me-4" href="../laptop/index.html">Notebooks <i class="bi bi-laptop text-decoration-underline"></i></a>
-                <a class="nav-item nav-link active me-4 text-decoration-underline">Vínculos <i class="bi bi-link-45deg"></i></a>
+                <a class="nav-item nav-link active me-4 text-decoration-underline" href="../link/index.html">Vínculos <i class="bi bi-link-45deg"></i></a>
             </div>
         </div>
     </nav>
@@ -38,14 +38,14 @@
                 <div class="col-10 bg-whitesmoke border rounded-1 mb-3 container-fluid p-0 m-0">
                     <div class="row p-0 m-0">
 
-                        <div class="col-12 text-center bg-whitesmoke-over display-6 fw-lighter p-2 fs-2" id="linkName">
+                        <div class="col-12 text-center bg-whitesmoke-over display-6 fw-lighter p-2 fs-1" id="linkName">
 
                         </div>
     
     
                         <div class="col-12 row p-3 mb-3">
                             <div class="col-6 row" id="laptopContainer">
-                                <img src="../../assets/imgs/laptop_black.png" alt="" class="col-6" style="height: 18rem;">
+                                <img src="../../assets/laptop_black.png" id="laptopImg" class="col-6" style="height: 18rem;">
                                 <div class="col-6 row">
                                     <div class="">
                                         <label for="serialNumber" class="form-label">Número de Série:</label>
@@ -65,7 +65,7 @@
     
     
                             <div class="col-6 row" id="beneficiaryContainer">
-                                <img src="../../assets/imgs/person.png" alt="" class="col-6" style="height: 18rem;">
+                                <img src="../../assets/person.png" alt="" class="col-6" style="height: 18rem;">
                                 <div class="col-6 row">
                                     <div class="">
                                         <label for="name" class="form-label">Nome Completo:</label>
@@ -125,6 +125,9 @@
                                     </div>                    
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-12 text-center bg-whitesmoke-over display-6 fw-lighter p-2 fs-2">
+                            <p id="dates"></p>
                         </div>
 
                     </div>

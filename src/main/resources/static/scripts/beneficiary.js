@@ -44,7 +44,7 @@ async function buildAll(opt) {
 
             const cardImage = document.createElement("img");
             cardImage.classList.add("card-img-top");
-            cardImage.src = "../../assets/imgs/person.png";
+            cardImage.src = "../../assets/person.png";
 
             const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");

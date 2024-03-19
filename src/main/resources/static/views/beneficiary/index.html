@@ -11,21 +11,21 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../../application_style.css">
-    <title>Página Inicial - Vinculos</title>
+    <title>Página Inicial - Beneficiários</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-whitesmoke p-4 mb-1 fs-5 fw-light">
-        <a class="nlaptopavbar-brand text-black text-decoration-none me-4">Página Inicial <i class="bi bi-house"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Alterna navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link me-4" href="../beneficiary/index.html">Beneficiários <i class="bi bi-person"></i></a>
+                <a class="nav-item nav-link me-4" href="../../index.html">Página Inicial <i class="bi bi-house"></i></a>   
+                <a class="nav-item nav-link active me-4 text-decoration-underline" href="../beneficiary/index.html">Beneficiários <i class="bi bi-person"></i></a>
                 <a class="nav-item nav-link me-4" href="../laptop/index.html">Notebooks <i class="bi bi-laptop text-decoration-underline"></i></a>
-                <a class="nav-item nav-link active me-4 text-decoration-underline">Vínculos <i class="bi bi-link-45deg"></i></a>
+                <a class="nav-item nav-link me-4" href="../link/index.html">Vínculos <i class="bi bi-link-45deg"></i></a>
             </div>
         </div>
     </nav>
@@ -37,9 +37,9 @@
                 <div class="col-10 bg-whitesmoke border rounded-1 mb-3">
                     <div class="row text-center bg-whitesmoke-over d-flex">
                         <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="all">Todos</div>
-                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="linked">Ativos</div>
-                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="linkedless">Finalizados</div>
-                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="register">Criar novo</div>
+                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="linked">Vinculádos</div>
+                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="linkedless">Não Vinculádos</div>
+                        <div class="nav-btn col-3 display-6 fw-lighter p-2 fs-2" id="register">Cadastrar</div>
                     </div>
                     <div class="row p-3 d-flex justify-content-center" id="cardLocal">
 
@@ -58,15 +58,23 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="beneficiary" class="form-label">Beneficiário:</label>
-                    <select name="" id="beneficiary" class="form-select">
-
-                    </select>
+                    <label for="name" class="form-label">Nome Completo:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Digite algo">
+                  </div>
+                  <div class="mb-3">
+                    <label for="identificationDocument" class="form-label">Documento de identificação (Apenas números):</label>
+                    <input type="text" class="form-control" id="identificationDocument" placeholder="Digite algo">
                 </div>
                 <div class="mb-3">
-                    <label for="laptop" class="form-label">Notebook:</label>
-                    <select name="" id="laptop" class="form-select">
-
+                    <label for="contactNumber" class="form-label">Número para Contato (Apenas números):</label>
+                    <input type="text" class="form-control" id="contactNumber" placeholder="Digite algo">
+                </div>
+                <div class="mb-3">
+                    <label for="contractType" class="form-label">Tipo de Contrato:</label>
+                    <select name="" id="contractType" class="form-select">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="1">Contratado (DT)</option>
+                        <option value="0">Efetivo</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -80,7 +88,7 @@
           </div>
         </div>
       </div>
-    <script type="module" src="../../scripts/link.js"></script>
+    <script type="module" src="../../scripts/beneficiary.js"></script>
 </body>
-<script src="../../application_script.js"></script>
+
 </html>

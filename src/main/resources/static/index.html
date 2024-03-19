@@ -15,17 +15,17 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-whitesmoke p-4 mb-1">
-        <a class="nlaptopavbar-brand">Navbar</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-whitesmoke p-4 mb-1 fs-5 fw-light">
+        <a class="nlaptopavbar-brand text-black text-decoration-none active me-4 text-decoration-underline">Página Inicial <i class="bi bi-house"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Alterna navegação">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="#">Beneficiários</a>
-                <a class="nav-item nav-link" href="#">Notebooks</a>
-                <a class="nav-item nav-link" href="#">Vínculos</a>
+                <a class="nav-item nav-link me-4" href="views/beneficiary/index.html">Beneficiários <i class="bi bi-person"></i></a>
+                <a class="nav-item nav-link me-4" href="views/laptop/index.html">Notebooks <i class="bi bi-laptop text-decoration-underline"></i></a>
+                <a class="nav-item nav-link me-4" href="views/link/index.html">Vínculos <i class="bi bi-link-45deg"></i></a>
             </div>
         </div>
     </nav>
@@ -36,18 +36,12 @@
                 <div class="col-1"></div>
                 <div class="col-10 bg-whitesmoke border rounded-1">
                     <div class="row text-center bg-whitesmoke-over">
-                        <div class="nav-btn col-4 display-6 fw-lighter p-2">Beneficiários</div>
-                        <div class="nav-btn col-4 display-6 fw-lighter p-2">Notebooks</div>
-                        <div class="nav-btn col-4 display-6 fw-lighter p-2">Links</div>
+                        <div class="nav-btn col-4 display-6 fw-lighter p-2" id="beneficiaries">Beneficiários</div>
+                        <div class="nav-btn col-4 display-6 fw-lighter p-2" id="laptop">Notebooks</div>
+                        <div class="nav-btn col-4 display-6 fw-lighter p-2" id="links">Vínculos</div>
                     </div>
-                    <div class="row p-3 d-flex justify-content-evenly">
-                        <div class="card col-3 mx-2 my-2 bg-whitesmoke-over border-0" id="" >
-                            <img src="" class="card-img-top">
-                            <div class="card-body">
-                              <h5 class="card-title">Card fsdfdsfsd</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                        </div>
+                    <div class="row p-3 d-flex justify-content-evenly"  id="cardLocal">
+                        
                         
                     </div>
                 </div> 
@@ -55,8 +49,9 @@
 
             </div>
         </div>
+        
     </section>
+    <script src="scripts/home/index.js"></script>
 </body>
 
-<script src="application_script.js"></script>
 </html>

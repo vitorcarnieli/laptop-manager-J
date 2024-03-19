@@ -7,6 +7,7 @@ import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.laptop.Laptop;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,6 +26,12 @@ public class Link extends BaseEntity {
 	@JoinColumn(name = "laptop_id")
 	@JsonIgnore
 	private Laptop laptop;
+	
+    @Column(name = "beneficiary_id", insertable = false, updatable = false)
+    private Long beneficiaryId;
+
+    @Column(name = "laptop_id", insertable = false, updatable = false)
+    private Long laptopId;
 	
 	private Date initDate;
 	
@@ -88,6 +95,24 @@ public class Link extends BaseEntity {
 	public static BaseEntity newInstance() {
 		return new Link();
 	}
+
+	public Long getBeneficiaryId() {
+		return beneficiaryId;
+	}
+
+	public void setBeneficiaryId(Long beneficiaryId) {
+		this.beneficiaryId = beneficiaryId;
+	}
+
+	public Long getLaptopId() {
+		return laptopId;
+	}
+
+	public void setLaptopId(Long laptopId) {
+		this.laptopId = laptopId;
+	}
+	
+	
 	
 	
 	

@@ -46,7 +46,7 @@ async function buildAll(opt) {
 
             const cardImage = document.createElement("img");
             cardImage.classList.add("card-img-top");
-            cardImage.src = e.laptopModel == "a515_54_5526" ? "../../assets/imgs/laptop_silver.png" : "../../assets/imgs/laptop_black.png";
+            cardImage.src = e.laptopModel == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
 
             const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");
