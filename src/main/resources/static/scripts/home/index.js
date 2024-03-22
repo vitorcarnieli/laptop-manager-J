@@ -14,7 +14,7 @@ const laptopBtn = document.getElementById("laptop")
 
 
 // BUILD FIELDS
-async function buildBeneficiaries() {
+async function buildBeneficiaries(opt) {
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
@@ -27,7 +27,11 @@ async function buildBeneficiaries() {
         }
 
         let data = await response.json();
-
+        if (opt === "linked") {
+            data.filter((e) => e.linked);
+        } else if (opt === "linkedless") {
+            data.filter((e) => !e.linked);
+        }
         for (const e of data) {
             const cardMain = document.createElement("div");
             cardMain.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "border-0");

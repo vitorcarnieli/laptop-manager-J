@@ -36,8 +36,42 @@
                 <div class="col-1"></div>
                 <div class="col-10 bg-whitesmoke border rounded-1">
                     <div class="row text-center bg-whitesmoke-over">
-                        <div class="nav-btn col-4 display-6 fw-lighter p-2" id="beneficiaries">Beneficiários</div>
-                        <div class="nav-btn col-4 display-6 fw-lighter p-2" id="laptop">Notebooks</div>
+                        <div class="nav-btn col-4 p-2 container-fluid" id="beneficiaries">
+                            <div class="row">
+
+                                <span class="display-6 fw-lighter col-12">Beneficiários</span>
+
+                                <div class="form-group col-7 mx-2 p-0">
+                                    <input type="text" name="" id="" class="bg-whitesmoke border-0 form-control">
+                                </div>
+
+                                <div class="form-group col-4 me-2 p-0">
+                                    <select name="" id="" class="form-select">
+                                        <option value="all">Todos</option>
+                                        <option value="linked">Vinculados</option>
+                                        <option value="linkedless">Não Vinculados</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="nav-btn col-4 p-2 container-fluid" id="beneficiaries">
+                            <div class="row">
+
+                                <span class="display-6 fw-lighter col-12">Notebooks</span>
+
+                                <div class="form-group col-7 mx-2 p-0" id="nameSearchBeneficiary" hidden>
+                                    <input type="text" name="" id="" class="bg-whitesmoke border-0 form-control">
+                                </div>
+
+                                <div class="form-group col-4 me-2 p-0"  hidden>
+                                    <select name="" id="filterBeneficiary" class="form-select" >
+                                        <option value="all">Todos</option>
+                                        <option value="linked">Vinculados</option>
+                                        <option value="linkedless">Não Vinculados</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="nav-btn col-4 display-6 fw-lighter p-2" id="links">Vínculos</div>
                     </div>
                     <div class="row p-3 d-flex justify-content-evenly"  id="cardLocal">

@@ -15,22 +15,23 @@ const registerModal = document.getElementById("registerModal");
 const registerModalBoot = new bootstrap.Modal(registerModal);
 const modalClose = document.getElementById("modalClose");
 const modalSubmit = document.getElementById("modalSubmit");
-const modalSerialNumber = document.getElementById("serialNumber");
-const modalListedNumber = document.getElementById("listedNumber");
-const modalLaptopModel = document.getElementById("laptopModel");
+const modalContactNumber = document.getElementById("contactNumber");
+const modalIdentificationDocument = document.getElementById("identificationDocument");
+const modalName = document.getElementById("name");
+const modalContractType = document.getElementById("contractType");
 const modalErrorField = document.getElementById("modalErrorField")
-const registerFields = [modalSerialNumber, modalLaptopModel, modalListedNumber]
+const registerFields = [modalContactNumber, modalIdentificationDocument, modalName, modalContractType];
 // VARS
+
 
 // BUILD FIELDS
 async function buildAll(opt) {
-
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
 
     try {
-        const response = await fetch('http://localhost:8080/laptop');
+        const response = await fetch('http://localhost:8080/beneficiary');
 
         if (!response.ok) {
             throw new Error('Erro ao obter os dados');
@@ -46,14 +47,15 @@ async function buildAll(opt) {
 
             const cardImage = document.createElement("img");
             cardImage.classList.add("card-img-top");
-            cardImage.src = e.laptopModel == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
+            cardImage.src = "../../assets/person.png";
 
             const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");
 
             const cardTitle = document.createElement("h5");
             cardTitle.classList.add("card-title");
-            cardTitle.textContent = `${[e.listedNumber.slice(0, 2), "-", e.listedNumber.slice(2)].join('')}`;
+            const splitedName = e.name.split(" ");
+            cardTitle.textContent = `${splitedName[0]} ${splitedName.pop()[0]}.`;
 
             const cardText = document.createElement("p");
             cardText.classList.add("card-text");
@@ -84,7 +86,7 @@ async function buildAll(opt) {
 
 async function fetchListedNumber(id) {
     try {
-        const response = await fetch(`http://localhost:8080/laptop/getBeneficiaryNameByLaptopId/${id}`);
+        const response = await fetch(`http://localhost:8080/beneficiary/getLaptopListedNumberByUserId/${id}`);
         if (!response.ok) {
             throw new Error('Erro ao obter os dados');
         }
@@ -111,30 +113,43 @@ function valueIsNull(element) {
 }
 
 async function modalSubmited() {
-
-    if (modalSerialNumber.value.length != 22) {
-        modalErrorField.textContent = "Verifique o campo Número de Serie, este campo deve conter exatos 22 caracteres";
+    console.log(modalName.value.length)
+    if (modalName.value.length < 3) {
+        console.log("entrou")
+        modalErrorField.textContent = "Verifique o campo Nome Completo";
         return;
     }
-    if (modalListedNumber.value.length != 7) {
-        modalErrorField.textContent = "Verifique o campo Número de Tombamento, este campo deve conter exatos 7 caracteres";
+    if (modalIdentificationDocument.value.length < 7 || modalIdentificationDocument.value.length > 11) {
+        modalErrorField.textContent = "Verifique o campo Documento de Identificação";
         return;
     }
-    if (modalLaptopModel.value == null) {
-        modalErrorField.textContent = "Verifique o campo Cor / Modelo.";
+    if (modalContactNumber.value.length < 10) {
+        modalErrorField.textContent = "Verifique o campo Número para contato, lembre-se de colocar ddd";
         return;
     }
-    
+    if (modalContractType.value == null) {
+        modalErrorField.textContent = "Verifique o campo Número para contato, lembre-se de colocar ddd";
+        return;
+    }
+    try {
+        if (!/^\d+$/.test(modalContractType.value) || !/^\d+$/.test(modalContactNumber.value)) {
+            throw Error;
+        };
+    } catch (error) {
+        modalErrorField.textContent = "Verifique o campo Documento de Identificação e Número para contato, digite apenas numeros";
+        return
+    }
     modalErrorField.textContent = "";
     let object = {
-        serialNumber: modalSerialNumber.value,
-        listedNumber: modalListedNumber.value,
-        laptopModel: modalLaptopModel.value,
+        name: modalName.value,
+        document: modalIdentificationDocument.value,
+        contactNumber: modalContactNumber.value,
+        contractType: modalContractType.value
     }
-
+    console.log(object)
     try {
         // Faz a solicitação POST para o servidor
-        const response = await fetch("http://localhost:8080/laptop", {
+        const response = await fetch("http://localhost:8080/beneficiary", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -150,7 +165,7 @@ async function modalSubmited() {
         const data = await response.json();
         if (data) {
             closeModal();
-            clickSelectBtns(allBtn);
+            buildAll();
         }
     } catch (error) {
         console.error('Erro:', error.message);
@@ -162,6 +177,7 @@ async function modalSubmited() {
 
 function changeFormField() {
     registerFields.forEach((f) => {
+        console.log(`form ${f.id} tem o seu value = ${f.value != null}`)
         if (f.value != "") {
             modalSubmit.classList.remove("disabled");
         } else {
@@ -185,15 +201,7 @@ registerFields.forEach((f) => {
 
 // MANAGE SELECT BTNS
 
-function setSelect(target) {
-    if (!target.classList.contains("bg-select")) {
-        selectBtns.forEach((f) => {
-            f.classList.remove("bg-select");
-        })
-        target.classList.add("bg-select")
-    }
-    return;
-}
+
 
 selectBtns.forEach((e) => {
     e.addEventListener("click", () => clickSelectBtns(e, null));

@@ -15,20 +15,22 @@ const registerModal = document.getElementById("registerModal");
 const registerModalBoot = new bootstrap.Modal(registerModal);
 const modalClose = document.getElementById("modalClose");
 const modalSubmit = document.getElementById("modalSubmit");
-const modalBeneficiary = document.getElementById("beneficiary");
-const modalLaptop = document.getElementById("identificationDocument");
+const modalSerialNumber = document.getElementById("serialNumber");
+const modalListedNumber = document.getElementById("listedNumber");
+const modalLaptopModel = document.getElementById("laptopModel");
 const modalErrorField = document.getElementById("modalErrorField")
-const registerFields = [modalBeneficiary, modalLaptop];
+const registerFields = [modalSerialNumber, modalLaptopModel, modalListedNumber]
 // VARS
 
 // BUILD FIELDS
 async function buildAll(opt) {
+
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
 
     try {
-        const response = await fetch('http://localhost:8080/beneficiary');
+        const response = await fetch('http://localhost:8080/laptop');
 
         if (!response.ok) {
             throw new Error('Erro ao obter os dados');
@@ -44,15 +46,14 @@ async function buildAll(opt) {
 
             const cardImage = document.createElement("img");
             cardImage.classList.add("card-img-top");
-            cardImage.src = "../../assets/person.png";
+            cardImage.src = e.laptopModel == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
 
             const cardBody = document.createElement("div");
             cardBody.classList.add("card-body");
 
             const cardTitle = document.createElement("h5");
             cardTitle.classList.add("card-title");
-            const splitedName = e.name.split(" ");
-            cardTitle.textContent = `${splitedName[0]} ${splitedName.pop()[0]}.`;
+            cardTitle.textContent = `${[e.listedNumber.slice(0, 2), "-", e.listedNumber.slice(2)].join('')}`;
 
             const cardText = document.createElement("p");
             cardText.classList.add("card-text");
@@ -61,7 +62,8 @@ async function buildAll(opt) {
             } else {
                 try {
                     const listedNumber = await fetchListedNumber(e.id);
-                    cardText.textContent = `Vinculado a: ${[listedNumber.slice(0, 2), "-", listedNumber.slice(2)].join('')}`;
+
+                    cardText.textContent = `Vinculado a: ${listedNumber}`;
                 } catch (error) {
                     console.error("Erro ao obter número vinculado:", error);
                     cardText.textContent = "Erro ao obter número vinculado";
@@ -83,7 +85,7 @@ async function buildAll(opt) {
 
 async function fetchListedNumber(id) {
     try {
-        const response = await fetch(`http://localhost:8080/beneficiary/getLaptopListedNumberByUserId/${id}`);
+        const response = await fetch(`http://localhost:8080/laptop/getBeneficiaryNameByLaptopId/${id}`);
         if (!response.ok) {
             throw new Error('Erro ao obter os dados');
         }
@@ -110,43 +112,30 @@ function valueIsNull(element) {
 }
 
 async function modalSubmited() {
-    console.log(modalName.value.length)
-    if (modalName.value.length < 3) {
-        console.log("entrou")
-        modalErrorField.textContent = "Verifique o campo Nome Completo";
+
+    if (modalSerialNumber.value.length != 22) {
+        modalErrorField.textContent = "Verifique o campo Número de Serie, este campo deve conter exatos 22 caracteres";
         return;
     }
-    if (modalIdentificationDocument.value.length < 7 || modalIdentificationDocument.value.length > 11) {
-        modalErrorField.textContent = "Verifique o campo Documento de Identificação";
+    if (modalListedNumber.value.length != 7) {
+        modalErrorField.textContent = "Verifique o campo Número de Tombamento, este campo deve conter exatos 7 caracteres";
         return;
     }
-    if (modalContactNumber.value.length < 10) {
-        modalErrorField.textContent = "Verifique o campo Número para contato, lembre-se de colocar ddd";
+    if (modalLaptopModel.value == null) {
+        modalErrorField.textContent = "Verifique o campo Cor / Modelo.";
         return;
     }
-    if (modalContractType.value == null) {
-        modalErrorField.textContent = "Verifique o campo Número para contato, lembre-se de colocar ddd";
-        return;
-    }
-    try {
-        if (!/^\d+$/.test(modalContractType.value) || !/^\d+$/.test(modalContactNumber.value)) {
-            throw Error;
-        };
-    } catch (error) {
-        modalErrorField.textContent = "Verifique o campo Documento de Identificação e Número para contato, digite apenas numeros";
-        return
-    }
+    
     modalErrorField.textContent = "";
     let object = {
-        name: modalName.value,
-        document: modalIdentificationDocument.value,
-        contactNumber: modalContactNumber.value,
-        contractType: modalContractType.value
+        serialNumber: modalSerialNumber.value,
+        listedNumber: modalListedNumber.value,
+        laptopModel: modalLaptopModel.value,
     }
-    console.log(object)
+
     try {
         // Faz a solicitação POST para o servidor
-        const response = await fetch("http://localhost:8080/beneficiary", {
+        const response = await fetch("http://localhost:8080/laptop", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -162,7 +151,7 @@ async function modalSubmited() {
         const data = await response.json();
         if (data) {
             closeModal();
-            buildAll();
+            clickSelectBtns(allBtn);
         }
     } catch (error) {
         console.error('Erro:', error.message);
@@ -174,7 +163,6 @@ async function modalSubmited() {
 
 function changeFormField() {
     registerFields.forEach((f) => {
-        console.log(`form ${f.id} tem o seu value = ${f.value != null}`)
         if (f.value != "") {
             modalSubmit.classList.remove("disabled");
         } else {
@@ -198,7 +186,15 @@ registerFields.forEach((f) => {
 
 // MANAGE SELECT BTNS
 
-
+function setSelect(target) {
+    if (!target.classList.contains("bg-select")) {
+        selectBtns.forEach((f) => {
+            f.classList.remove("bg-select");
+        })
+        target.classList.add("bg-select")
+    }
+    return;
+}
 
 selectBtns.forEach((e) => {
     e.addEventListener("click", () => clickSelectBtns(e, null));
