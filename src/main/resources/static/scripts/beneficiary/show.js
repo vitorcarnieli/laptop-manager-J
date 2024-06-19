@@ -27,6 +27,9 @@ function defInfos() {
 function defReports(dataBeneficiary) {
 
     dataBeneficiary.then(data => {
+        if (data.length == 0) {
+            beneficiaryWithoutLinks()
+        }
         data.forEach(e => {
             getLaptopData(e.laptopId).then(dataLaptop => {
                 createTableReports(
@@ -42,6 +45,15 @@ function defReports(dataBeneficiary) {
             })
         });
     })
+}
+
+function beneficiaryWithoutLinks() {
+    let table = document.getElementsByTagName("table")[0];
+    table.remove();
+    let nonLinkeds = document.getElementById("alert")
+    nonLinkeds.hidden = false;
+    nonLinkeds.textContent = "Este beneficiário nunca possuiu um vínculo";
+    nonLinkeds.classList = "text-danger fs-3 text-center"
 }
 
 function createTableReports(obj) {
