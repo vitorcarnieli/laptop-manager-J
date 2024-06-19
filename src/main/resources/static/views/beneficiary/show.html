@@ -42,13 +42,32 @@
                     <div class="row p-0 m-0">
 
                         <div class="col-12 text-center bg-whitesmoke-over display-6 fw-lighter p-2 fs-1"
-                            id="beneficiaryName">
-                            Teste
+                            id="beneficiaryNameTitle">
+                            
                         </div>
 
 
                         <div class="col-12 row p-3 mb-3">
+                            <img src="../../assets/person.png" class="col-4" style="height: 23rem;">
 
+                            <div class="col-8">
+                                <div class="form-group mb-4">
+                                    <label>Nome</label>
+                                    <input class="form-control" disabled id="beneficiaryName" class="" >
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>Documento</label>
+                                    <input class="form-control" disabled id="beneficiaryDocument" class="" >
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>Contato</label>
+                                    <input class="form-control" disabled id="beneficiaryContact" class="" >
+                                </div> 
+                                <div class="form-group mb-4">
+                                    <label>Tipo de contrato</label>
+                                    <input class="form-control" disabled id="beneficiaryContractType" class="" >
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-12 text-center bg-whitesmoke-over display-6 fw-lighter p-2 fs-2 t">
@@ -56,22 +75,17 @@
                         </div>
 
                         <div class="col-12 row p-3 mb-3 mx-auto">
-                            <table class="table text-center  table-striped table-striped-columns table-bordered">
+                            <table class="table text-center   table-bordered">
                                 <thead>
-                                    <tr class="text-center display-6 p-2 fs-4">
-                                        <td>Notebook vínculado</td>
-                                        <td>Data de inicio</td>
-                                        <td>Data de termino</td>
-                                        <td>Ir para vínculo</td>
+                                    <tr class="text-center display-6 p-2 fs-4 bg-black" >
+                                        <td style="background-color: #E5E5E5;">Notebook vínculado</td>
+                                        <td style="background-color: #E5E5E5;">Data de inicio</td>
+                                        <td style="background-color: #E5E5E5;">Data de termino</td>
+                                        <td style="background-color: #E5E5E5;">Ir para vínculo</td>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>01-00212</td>
-                                        <td>20/02/2004</td>
-                                        <td>20/02/0221</td>
-                                        <td>ir</td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -87,7 +101,7 @@
             </div>
         </div>
     </section>
-    <script type="module" src="../../scripts/link/show.js"></script>
+    <script type="module" src="../../scripts/beneficiary/show.js"></script>
 </body>
 <script src="../../application_script.js"></script>
 
