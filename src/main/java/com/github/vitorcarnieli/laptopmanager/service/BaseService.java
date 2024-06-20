@@ -27,7 +27,6 @@ public class BaseService<E extends BaseEntity, D extends BaseDto> {
 
 	public List<E> findAll() throws Exception {
 		try {
-			System.out.println(baseRepository.findAll());
 			return baseRepository.findAll();
 		} catch (Exception e) {
 			throw e;

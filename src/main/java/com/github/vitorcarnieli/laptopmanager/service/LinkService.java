@@ -77,8 +77,18 @@ public class LinkService extends BaseService<Link, LinkDto>{
 		} catch (Exception e) {
 			throw new RuntimeException("Error in get beneficiaries and laptops availables");
 		}
-		
 	}
+
+    public boolean finishLinkForId(Long id) throws Exception {
+        try {
+            Link link = this.findById(id);
+            link.finishLink();
+            return this.save(link);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Link by id:" + id + " not founded");
+            throw e;
+        }
+    }
 
 
 }

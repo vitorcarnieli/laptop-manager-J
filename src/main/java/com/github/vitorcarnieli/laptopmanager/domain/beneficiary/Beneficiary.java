@@ -35,7 +35,8 @@ public class Beneficiary extends BaseEntity {
 	public Beneficiary() {
 		
 	}
-	
+
+
 	public Boolean isLinked() {
 	    return !links.isEmpty() && links.get(links.size() - 1).isCurrent();
 	}

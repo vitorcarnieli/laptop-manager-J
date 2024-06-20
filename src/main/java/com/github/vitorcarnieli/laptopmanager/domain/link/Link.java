@@ -52,6 +52,15 @@ public class Link extends BaseEntity {
 		beneficiary.addLink(this);
 	}
 	
+    public boolean finishLink() {
+        if (!isCurrent()) {
+            throw new RuntimeException("link with id:" + this.getId() + " does not is current");
+        }
+        this.setEndDate(new Date());
+        System.out.println(this.getEndDate());
+        return true;
+    }
+
 	public boolean isCurrent() {
 		return endDate == null;
 	}
@@ -111,6 +120,12 @@ public class Link extends BaseEntity {
 	public void setLaptopId(Long laptopId) {
 		this.laptopId = laptopId;
 	}
+
+    @Override
+    public String toString() {
+        return "Link [beneficiary=" + beneficiary + ", laptop=" + laptop + ", beneficiaryId=" + beneficiaryId
+                + ", laptopId=" + laptopId + ", initDate=" + initDate + ", endDate=" + endDate + "]";
+    }
 	
 	
 	
