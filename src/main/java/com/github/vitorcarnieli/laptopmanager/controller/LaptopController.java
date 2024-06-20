@@ -29,4 +29,13 @@ public class LaptopController extends BaseController<Laptop, LaptopDto> {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
 		}
 	}
+
+    @GetMapping("/getAllLinksByLaptopId/{id}")
+    public ResponseEntity<Object> getAllLinksIdByBeneficiaryId(@PathVariable("id") Long id) {
+        try {
+			return ResponseEntity.status(HttpStatus.OK).body(laptopService.getAllLinksByLaptopId(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+		}
+    } 
 }

@@ -18,9 +18,9 @@ function defInfos() {
     getBeneficiaryData().then(b => {
         beneficiaryNameTitle.textContent = b.name;
         beneficiaryName.value = b.name;
-        beneficiaryDocument.value = b.document;
+        beneficiaryDocument.value = b.document.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');;
         beneficiaryContact.value = b.contactNumber;
-        beneficiaryContractType.value = b.contractType;
+        beneficiaryContractType.value = b.contractType[0] === "E" ? "Efetivo" : "Contratado (DT)";
     }).catch(e => {throw e});
 }
 

@@ -41,8 +41,9 @@ async function buildAll(opt) {
         data = opt === "LINKED" ? data.filter(e => e.linked) : opt === "LINKEDLESS" ? data = data.filter(e => !e.linked) : data;
 
         for (const e of data) {
-            const cardMain = document.createElement("div");
-            cardMain.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "border-0");
+            const cardMain = document.createElement("a");
+            cardMain.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "text-decoration-none", "border-0");
+            cardMain.href = `/views/beneficiary/show.html?id=${e.id}`
             cardMain.style.width = "18rem";
 
             const cardImage = document.createElement("img");
