@@ -1,8 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    allBtn.classList.add("bg-select");
-    buildAll();
-});
-
 // VARS
 const cardLocal = document.getElementById("cardLocal");
 const selectBtns = document.querySelectorAll(".nav-btn");
@@ -10,6 +5,9 @@ const allBtn = document.getElementById("all");
 const linkedBtn = document.getElementById("linked");
 const linkedlessBtn = document.getElementById("linkedless");
 const registerBtn = document.getElementById("register");
+const searchField = document.getElementsByTagName("input")[0];
+var laptops = [];
+var filterSelected = "";
 
 const registerModal = document.getElementById("registerModal");
 const registerModalBoot = new bootstrap.Modal(registerModal);
@@ -22,88 +20,148 @@ const modalErrorField = document.getElementById("modalErrorField")
 const registerFields = [modalSerialNumber, modalLaptopModel, modalListedNumber]
 // VARS
 
-// BUILD FIELDS
-async function buildAll(opt) {
 
+searchField.addEventListener("input", (() => {buildPage()}));
+
+selectBtns.forEach(btn => btn.addEventListener("click", (() => {
+    btn.id == "register" ? () => {} : changeNavBtnSelected(btn);
+})));
+
+allBtn.click();
+
+function buildPage() {
+    
+    deleteChildsOfCardScope();
+    
+    getLaptopData().then(e => {
+        appendCardToCardsLocal(filterBeneficiaries(searchField.value.replace("-","")));
+    });
+}
+
+function filterBeneficiaries(i) {
+    if (filterSelected == "linkedless") {
+        laptops = laptops.filter(b => !b.linked);
+    } else if (filterSelected == "linked") {
+        laptops = laptops.filter(b => b.linked);
+    }
+
+    if (i != null || i.trim() != "" || i != undefined) {
+        return laptops.filter(b => b.listedNumber.includes(i));
+    }
+
+    return laptops;
+}
+
+
+function appendCardToCardsLocal(dataForCards) {
+    dataForCards.forEach(b => cardLocal.appendChild(buildCard(b)));
+}
+
+function buildCard(e) {
+    let scope = createCardScope(e.id);
+    let body = createCardBody();
+    let title = createCardTitle(e.listedNumber);
+    let text = createCardText(e);
+    let image = createCardImage(e.laptopModel);
+
+    [title, text].forEach(e => body.appendChild(e));
+    [image, body].forEach(e => scope.appendChild(e));
+    
+    return scope;
+}
+
+function deleteChildsOfCardScope() {
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
-
-    try {
-        const response = await fetch('http://localhost:8080/laptop');
-
-        if (!response.ok) {
-            throw new Error('Erro ao obter os dados');
-        }
-
-        let data = await response.json();
-        data = opt === "LINKED" ? data.filter(e => e.linked) : opt === "LINKEDLESS" ? data = data.filter(e => !e.linked) : data;
-
-        if (!data.length) {
-            let divForMessage = document.createElement("div")
-            divForMessage.textContent = "Nenhum notebook encontrado com o filtro aplicado"
-            divForMessage.className = "text-center text-danger"
-            cardLocal.appendChild(divForMessage);
-        }
-
-        for (const e of data) {
-            const cardMain = document.createElement("a");
-            cardMain.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "border-0", "text-decoration-none");
-            cardMain.href = `/views/laptop/show.html?id=${e.id}`
-            cardMain.style.width = "18rem";
-
-            const cardImage = document.createElement("img");
-            cardImage.classList.add("card-img-top");
-            cardImage.src = e.laptopModel == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
-
-            const cardBody = document.createElement("div");
-            cardBody.classList.add("card-body");
-
-            const cardTitle = document.createElement("h5");
-            cardTitle.classList.add("card-title");
-            cardTitle.textContent = `${[e.listedNumber.slice(0, 2), "-", e.listedNumber.slice(2)].join('')}`;
-
-            const cardText = document.createElement("p");
-            cardText.classList.add("card-text");
-            if (!e.linked) {
-                cardText.textContent = "Não possui vínculo";
-            } else {
-                try {
-                    const listedNumber = await fetchListedNumber(e.id);
-
-                    cardText.textContent = `Vinculado a: ${listedNumber}`;
-                } catch (error) {
-                    console.error("Erro ao obter número vinculado:", error);
-                    cardText.textContent = "Erro ao obter número vinculado";
-                }
-            }
-            cardBody.appendChild(cardTitle);
-            cardBody.appendChild(cardText);
-
-            cardMain.appendChild(cardImage);
-            cardMain.appendChild(cardBody);
-
-            cardLocal.appendChild(cardMain);
-        }
-    } catch (error) {
-        console.error("Erro ao obter dados dos beneficiários:", error);
-        throw error;
-    }
 }
 
-async function fetchListedNumber(id) {
-    try {
-        const response = await fetch(`http://localhost:8080/laptop/getBeneficiaryNameByLaptopId/${id}`);
-        if (!response.ok) {
-            throw new Error('Erro ao obter os dados');
-        }
-        const data = await response.text();
-        return data;
-    } catch (error) {
-        throw error;
-    }
+function getLaptopData() {
+    return fetch(`http://localhost:8080/laptop`)
+        .then(responseRaw => {
+            return responseRaw.json();
+        })
+        .then(response => {
+            laptops = response;
+            return laptops;
+        })
+        .catch(e => {
+            throw new Error("erro ao obter informaçoes");
+        })
 }
-// BUILD FIELDS
+
+function getLaptopNumberWhichBeneficiaryLinked(id) {
+    return fetch(`http://localhost:8080/laptop/getBeneficiaryNameByLaptopId/${id}`)
+        .then(responseRaw => {
+            console.log(responseRaw)
+
+            return responseRaw.text();
+        })
+        .then(response => {
+            return response;
+        })
+        .catch(e => {
+            console.log(e);
+            throw new Error("erro ao obter informaçoes 2");
+        })
+}
+
+function createCardScope(id) {
+    let cardScope = document.createElement("a");
+    cardScope.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "text-decoration-none", "border-0");
+    cardScope.href = `/views/laptop/show.html?id=${id}`
+    cardScope.style.width = "18rem";
+    return cardScope;
+}
+
+function createCardImage(model) {
+    let cardImage = document.createElement("img");
+    cardImage.classList.add("card-img-top");
+    cardImage.src = model == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
+    return cardImage;
+}
+
+function createCardBody() {
+    let cardBody = document.createElement("div");
+    cardBody.classList.add("card-body");
+    return cardBody;
+}
+
+function createCardTitle(name) {
+    let cardTitle = document.createElement("h5");
+    cardTitle.classList.add("card-title");
+    cardTitle.textContent = name.slice(0, 2) + "-" + name.slice(2);; 
+    return cardTitle;
+}
+
+function createCardText(e) {
+    let cardText = document.createElement("p");
+    cardText.classList.add("card-text");
+    if (!e.linked) {
+        cardText.textContent = "Não possui vínculo";
+        return cardText;
+    }
+    try {
+        getLaptopNumberWhichBeneficiaryLinked(e.id).then(d => {
+            cardText.textContent = `Vinculado a: ${d}`;
+            return cardText;
+
+        });
+    } catch (error) {
+        console.error("Erro ao obter número vinculado:", error);
+        cardText.textContent = "Erro ao obter número vinculado";
+    }
+
+    return cardText;
+
+}
+
+function changeNavBtnSelected(btn) {
+    selectBtns.forEach(btn => btn.classList.remove("bg-select"));
+    filterSelected = btn.id;
+    btn.classList.add("bg-select");
+    buildPage();
+}
 
 
 // MANAGE MODAL
@@ -160,6 +218,7 @@ async function modalSubmited() {
         if (data) {
             closeModal();
             clickSelectBtns(allBtn);
+            buildPage();
         }
     } catch (error) {
         console.error('Erro:', error.message);
@@ -191,38 +250,3 @@ registerFields.forEach((f) => {
 
 // MANAGE MODAL
 
-
-// MANAGE SELECT BTNS
-
-function setSelect(target) {
-    if (!target.classList.contains("bg-select")) {
-        selectBtns.forEach((f) => {
-            f.classList.remove("bg-select");
-        })
-        target.classList.add("bg-select")
-    }
-    return;
-}
-
-selectBtns.forEach((e) => {
-    e.addEventListener("click", () => clickSelectBtns(e, null));
-})
-
-function clickSelectBtns(element) {
-    if (element.textContent == "Cadastrar") {
-        return
-    }
-    if (!element.classList.contains("bg-select")) {
-        selectBtns.forEach((f) => {
-            f.classList.remove("bg-select");
-        })
-
-        element.classList.add("bg-select")
-
-    }
-
-    element == allBtn ? buildAll() : element == linkedBtn ? buildAll("LINKED") : element == linkedlessBtn ? buildAll("LINKEDLESS") : console.log(1);
-
-}
-
-// MANAGE SELECT BTNS
