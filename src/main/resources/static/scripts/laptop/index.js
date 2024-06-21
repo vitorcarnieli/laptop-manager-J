@@ -39,6 +39,13 @@ async function buildAll(opt) {
         let data = await response.json();
         data = opt === "LINKED" ? data.filter(e => e.linked) : opt === "LINKEDLESS" ? data = data.filter(e => !e.linked) : data;
 
+        if (!data.length) {
+            let divForMessage = document.createElement("div")
+            divForMessage.textContent = "Nenhum notebook encontrado com o filtro aplicado"
+            divForMessage.className = "text-center text-danger"
+            cardLocal.appendChild(divForMessage);
+        }
+
         for (const e of data) {
             const cardMain = document.createElement("a");
             cardMain.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "border-0", "text-decoration-none");
