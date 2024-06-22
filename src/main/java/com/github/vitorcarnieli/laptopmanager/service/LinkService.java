@@ -49,9 +49,7 @@ public class LinkService extends BaseService<Link, LinkDto>{
 	        if (link == null) {
 	            throw new EntityNotFoundException("Link Entity by id: " + id + " not found");
 	        }
-	        if (!link.isCurrent()) {
-	            throw new RuntimeException("Link entity by id: " + id + " is not current");
-	        }
+
 	        String[] name = link.getBeneficiary().getName().split(" ");
 	        return link.getLaptop()
 	        		.getListedNumber().replaceAll("^(\\d{2})(\\d{5})$", "$1-$2")

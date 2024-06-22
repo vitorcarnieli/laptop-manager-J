@@ -6,7 +6,9 @@ const linkedBtn = document.getElementById("linked");
 const linkedlessBtn = document.getElementById("linkedless");
 const registerBtn = document.getElementById("register");
 const searchField = document.getElementsByTagName("input")[0];
+var tarcisio = "gay";
 var links = [];
+
 var filterSelected = "";
 
 const registerModal = document.getElementById("registerModal");
@@ -21,33 +23,34 @@ const registerFields = [modalLaptop, modalBeneficiary]
 
 searchField.addEventListener("input", (() => {buildPage()}));
 
+allBtn.click();
+
+
 selectBtns.forEach(btn => btn.addEventListener("click", (() => {
     btn.id == "register" ? () => {} : changeNavBtnSelected(btn);
 })));
-
-allBtn.click();
 
 function buildPage() {
     
     deleteChildsOfCardScope();
     
     getLinkData().then(e => {
-        appendCardToCardsLocal(filterBeneficiaries(searchField.value.replace("-","")));
+        appendCardToCardsLocal(filterBeneficiaries(searchField.value));
     });
 }
 
 function filterBeneficiaries(i) {
     if (filterSelected == "linkedless") {
-        laptops = laptops.filter(b => !b.current);
+        links = links.filter(b => !b.current);
     } else if (filterSelected == "linked") {
-        laptops = laptops.filter(b => b.current);
+        links = links.filter(b => b.current);
     }
     /*
     if (i != null || i.trim() != "" || i != undefined) {
         return laptops.filter(b => b.listedNumber.includes(i));
     }
     */
-    return laptops;
+    return links;
 }
 
 
@@ -56,11 +59,12 @@ function appendCardToCardsLocal(dataForCards) {
 }
 
 function buildCard(e) {
+
     let scope = createCardScope(e.id);
     let body = createCardBody();
-    let title = createCardTitle(e.listedNumber);
+    let title = createCardTitle(e.name);
     let text = createCardText(e);
-    let image = createCardImage(e.laptopModel);
+    let image = createCardImage();
 
     [title, text].forEach(e => body.appendChild(e));
     [image, body].forEach(e => scope.appendChild(e));
@@ -81,11 +85,13 @@ function getLinkData() {
         })
         .then(response => {
             response.forEach(l => {
+                console.log(l);
                 getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
-                    links.add(
+                    links.push(
                         {
+                            id:l.id,
                             name:r,
-                            isCurrent: l.isCurrent
+                            isCurrent: l.current
                         }
                     )
                 })
@@ -100,11 +106,10 @@ function getLinkData() {
 function getBeneficiaryNameLaptopListedNumberByLinkId(id) {
     return fetch(`http://localhost:8080/link/getBeneficiaryNameLaptopListedNumberByLinkId/${id}`)
         .then(responseRaw => {
-            console.log(responseRaw)
-
             return responseRaw.text();
         })
         .then(response => {
+            console.log(response)
             return response;
         })
         .catch(e => {
@@ -116,15 +121,15 @@ function getBeneficiaryNameLaptopListedNumberByLinkId(id) {
 function createCardScope(id) {
     let cardScope = document.createElement("a");
     cardScope.classList.add("card", "col-2", "mx-2", "my-2", "bg-whitesmoke-over", "text-decoration-none", "border-0");
-    cardScope.href = `/views/laptop/show.html?id=${id}`
+    cardScope.href = `/views/link/show.html?id=${id}`
     cardScope.style.width = "18rem";
     return cardScope;
 }
 
-function createCardImage(model) {
+function createCardImage() {
     let cardImage = document.createElement("img");
     cardImage.classList.add("card-img-top");
-    cardImage.src = model == "a515_54_5526" ? "../../assets/laptop_silver.png" : "../../assets/laptop_black.png";
+    cardImage.src = "../../assets/person.png";
     return cardImage;
 }
 
@@ -137,28 +142,21 @@ function createCardBody() {
 function createCardTitle(name) {
     let cardTitle = document.createElement("h5");
     cardTitle.classList.add("card-title");
-    cardTitle.textContent = name.slice(0, 2) + "-" + name.slice(2);; 
+    cardTitle.textContent = name;
     return cardTitle;
 }
 
 function createCardText(e) {
     let cardText = document.createElement("p");
     cardText.classList.add("card-text");
-    if (!e.linked) {
-        cardText.textContent = "Não possui vínculo";
+    console.log(e)
+
+
+    if (!e.isCurrent) {
+        cardText.textContent = "Finalizado";
         return cardText;
     }
-    try {
-        getLaptopNumberWhichBeneficiaryLinked(e.id).then(d => {
-            cardText.textContent = `Vinculado a: ${d}`;
-            return cardText;
-
-        });
-    } catch (error) {
-        console.error("Erro ao obter número vinculado:", error);
-        cardText.textContent = "Erro ao obter número vinculado";
-    }
-
+    cardText.textContent = "Ativo";
     return cardText;
 
 }
@@ -273,21 +271,5 @@ selectBtns.forEach((e) => {
     e.addEventListener("click", () => clickSelectBtns(e, null));
 })
 
-function clickSelectBtns(element) {
-    if (element.textContent == "Cadastrar") {
-        return
-    }
-    if (!element.classList.contains("bg-select")) {
-        selectBtns.forEach((f) => {
-            f.classList.remove("bg-select");
-        })
-
-        element.classList.add("bg-select")
-
-    }
-
-    element == allBtn ? buildAll() : element == linkedBtn ? buildAll("LINKED") : element == linkedlessBtn ? buildAll("LINKEDLESS") : console.log(1);
-
-}
 
 // MANAGE SELECT BTNS
