@@ -24,19 +24,20 @@ const registerFields = [modalLaptop, modalBeneficiary]
 
 searchField.addEventListener("input", (() => {buildPage()}));
 
-allBtn.click();
-
-
 selectBtns.forEach(btn => btn.addEventListener("click", (() => {
     btn.id == "register" ? () => {} : changeNavBtnSelected(btn);
 })));
+
+allBtn.click();
+
+
 
 function buildPage() {
     
     deleteChildsOfCardScope();
     
     getLinkData().then(e => {
-        appendCardToCardsLocal(filterBeneficiaries(searchField.value));
+        appendCardToCardsLocal(filterLinks(searchField.value));
     });
 
     getAvaliableEntitys().then(r => {
@@ -45,11 +46,11 @@ function buildPage() {
 
 }
 
-function filterBeneficiaries(i) {
+function filterLinks(i) {
     if (filterSelected == "linkedless") {
-        links = links.filter(b => !b.current);
-    } else if (filterSelected == "linked") {
         links = links.filter(b => b.current);
+    } else if (filterSelected == "linked") {
+        links = links.filter(b => !b.current);
     }
     /*
     if (i != null || i.trim() != "" || i != undefined) {
@@ -61,7 +62,12 @@ function filterBeneficiaries(i) {
 
 
 function appendCardToCardsLocal(dataForCards) {
-    dataForCards.forEach(b => cardLocal.appendChild(buildCard(b)));
+
+    dataForCards.forEach(b => {
+        console.log(b);
+        cardLocal.appendChild(buildCard(b));
+        console.log(b + "2");
+    });
 }
 
 function buildCard(e) {
@@ -74,7 +80,8 @@ function buildCard(e) {
 
     [title, text].forEach(e => body.appendChild(e));
     [image, body].forEach(e => scope.appendChild(e));
-    
+
+
     return scope;
 }
 
@@ -82,31 +89,28 @@ function deleteChildsOfCardScope() {
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
+    links = []
 }
 
 function getLinkData() {
     return fetch(`http://localhost:8080/link`)
-        .then(responseRaw => {
-            return responseRaw.json();
-        })
+        .then(responseRaw => responseRaw.json())
         .then(response => {
-            response.forEach(l => {
-                console.log(l);
+            const promises = response.map(l => 
                 getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
-                    links.push(
-                        {
-                            id:l.id,
-                            name:r,
-                            isCurrent: l.current
-                        }
-                    )
+                    let obj = {
+                        id: l.id,
+                        name: r,
+                        isCurrent: l.current
+                    }
+                    links.push(obj);
                 })
-            })
-            return links;
+            );
+            return Promise.all(promises);
         })
         .catch(e => {
             throw new Error("erro ao obter informaçoes");
-        })
+        });
 }
 
 function getAvaliableEntitys() {
@@ -202,10 +206,10 @@ function createCardText(e) {
 }
 
 function changeNavBtnSelected(btn) {
+    buildPage();
     selectBtns.forEach(btn => btn.classList.remove("bg-select"));
     filterSelected = btn.id;
     btn.classList.add("bg-select");
-    buildPage();
 }
 
 
@@ -314,3 +318,4 @@ selectBtns.forEach((e) => {
 
 
 // MANAGE SELECT BTNS
+
