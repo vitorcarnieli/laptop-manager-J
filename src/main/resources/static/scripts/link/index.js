@@ -21,6 +21,9 @@ const modalErrorField = document.getElementById("modalErrorField")
 const registerFields = [modalLaptop, modalBeneficiary]
 // VARS
 
+console.log(getAvaliableEntitys().then(r => {
+    console.log(r)
+}));
 searchField.addEventListener("input", (() => {buildPage()}));
 
 allBtn.click();
@@ -101,6 +104,40 @@ function getLinkData() {
         .catch(e => {
             throw new Error("erro ao obter informaçoes");
         })
+}
+
+function getAvaliableEntitys() {
+    getAvaliableBeneficiaries().then(rBeneficiary => {
+        getAvaliableLaptops().then(rLaptops => {
+            return [rBeneficiary, rLaptops];
+        })
+    })
+}
+
+function getAvaliableLaptops() {
+    return fetch(`http://localhost:8080/laptop/getAvailableLaptops`)
+    .then(responseRaw => {
+        return responseRaw.json();
+    })
+    .then(response => {
+        return response;
+    })
+    .catch(e => {
+        throw new Error("erro ao obter informaçoes");
+    })
+}
+
+function getAvaliableBeneficiaries() {
+    return fetch(`http://localhost:8080/beneficiary/getAvailableBeneficiaries`)
+    .then(responseRaw => {
+        return responseRaw.json();
+    })
+    .then(response => {
+        return response;
+    })
+    .catch(e => {
+        throw new Error("erro ao obter informaçoes");
+    })
 }
 
 function getBeneficiaryNameLaptopListedNumberByLinkId(id) {

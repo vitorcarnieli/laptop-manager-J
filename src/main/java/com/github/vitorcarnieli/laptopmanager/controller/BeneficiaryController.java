@@ -17,6 +17,8 @@ import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 import com.github.vitorcarnieli.laptopmanager.service.BeneficiaryService;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/beneficiary")
@@ -43,5 +45,15 @@ public class BeneficiaryController extends BaseController<Beneficiary, Beneficia
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
 		}
     } 
+
+    @GetMapping("/getAvailableBeneficiaries")
+    public ResponseEntity<Object> getAvailableBeneficiaries() throws Exception {
+        try {
+			return ResponseEntity.status(HttpStatus.OK).body(beneficiaryService.getAvailableBeneficiaries());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+		}
+    }
+    
 	
 }

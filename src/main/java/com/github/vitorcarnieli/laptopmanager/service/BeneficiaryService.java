@@ -1,5 +1,6 @@
 package com.github.vitorcarnieli.laptopmanager.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,10 @@ public class BeneficiaryService extends BaseService<Beneficiary, BeneficiaryDto>
             throw e;
         }
     } 
+
+    public List<Beneficiary> getAvailableBeneficiaries() throws Exception {
+        return this.findAll().stream().filter(b -> !b.isLinked()).toList();
+    }
 
 
 }

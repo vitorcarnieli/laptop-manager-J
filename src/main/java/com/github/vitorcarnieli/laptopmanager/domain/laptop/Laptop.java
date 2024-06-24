@@ -7,6 +7,7 @@ import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.beneficiary.Beneficiary;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -17,8 +18,10 @@ public class Laptop extends BaseEntity {
 
 	private static final long serialVersionUID = -1934216965515548387L;
 	
+    @Column(unique = true)
 	private String serialNumber;
 	
+    @Column(unique = true)
 	private String listedNumber;
 	
 	private LaptopModel laptopModel;

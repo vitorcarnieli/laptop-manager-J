@@ -38,4 +38,13 @@ public class LaptopController extends BaseController<Laptop, LaptopDto> {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
 		}
     } 
+
+    @GetMapping("/getAvailableLaptops")
+    public ResponseEntity<Object> getAvailableLaptops() {
+        try {
+			return ResponseEntity.status(HttpStatus.OK).body(laptopService.getAvailableLaptops());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+		}
+    }
 }
