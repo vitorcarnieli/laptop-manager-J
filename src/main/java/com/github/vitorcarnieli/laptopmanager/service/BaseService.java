@@ -46,19 +46,21 @@ public class BaseService<E extends BaseEntity, D extends BaseDto> {
 	}
 	
 	public boolean saveAll(Iterable<D> entitys) throws Exception {
-		/*
+		
 		try {
 			entitys.forEach( e -> {
-				E entity = (E) E.getClass().newInstance();
-				BeanUtils.copyProperties(e, entity);
-				baseRepository.save(entity);
+                try {
+                    E entity = entityClass.getDeclaredConstructor().newInstance();
+                    BeanUtils.copyProperties(e, entity);
+                    this.save(entity);   
+                } catch (Exception error) {
+                    System.out.println("Erro ao salver multiplo usuarios");
+                }
 			});
 			return true;
 		} catch (Exception e) {
 			throw e;
-		}
-		*/
-		return true;
+		}		
 	}
 	
 	public boolean save(D dto) throws Exception {

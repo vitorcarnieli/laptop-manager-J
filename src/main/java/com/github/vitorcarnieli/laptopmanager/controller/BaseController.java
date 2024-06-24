@@ -20,7 +20,6 @@ public class BaseController<E extends BaseEntity, D extends BaseDto> {
 
 	@PostMapping
 	public ResponseEntity<Object> save(@RequestBody D dto) {
-		System.out.println("entrou aqui52");
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(baseService.save(dto));
 		} catch (Exception e) {
@@ -30,6 +29,7 @@ public class BaseController<E extends BaseEntity, D extends BaseDto> {
 
 	@PostMapping("/all")
 	public ResponseEntity<Object> saveAll(@RequestBody Iterable<D> dtos) {
+        System.out.println(dtos);
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(baseService.saveAll(dtos));
 		} catch (Exception e) {

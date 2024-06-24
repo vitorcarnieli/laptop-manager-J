@@ -8,6 +8,7 @@ const registerBtn = document.getElementById("register");
 const searchField = document.getElementsByTagName("input")[0];
 var tarcisio = "gay";
 var links = [];
+var avaliableEntitys = [];
 
 var filterSelected = "";
 
@@ -21,9 +22,6 @@ const modalErrorField = document.getElementById("modalErrorField")
 const registerFields = [modalLaptop, modalBeneficiary]
 // VARS
 
-console.log(getAvaliableEntitys().then(r => {
-    console.log(r)
-}));
 searchField.addEventListener("input", (() => {buildPage()}));
 
 allBtn.click();
@@ -40,6 +38,11 @@ function buildPage() {
     getLinkData().then(e => {
         appendCardToCardsLocal(filterBeneficiaries(searchField.value));
     });
+
+    getAvaliableEntitys().then(r => {
+        avaliableEntitys.push(r);
+    });
+
 }
 
 function filterBeneficiaries(i) {
@@ -107,9 +110,9 @@ function getLinkData() {
 }
 
 function getAvaliableEntitys() {
-    getAvaliableBeneficiaries().then(rBeneficiary => {
-        getAvaliableLaptops().then(rLaptops => {
-            return [rBeneficiary, rLaptops];
+    return getAvaliableBeneficiaries().then(rBeneficiaries => {
+        return getAvaliableLaptops().then(rLaptops => {
+            return [rLaptops,rBeneficiaries];
         })
     })
 }
@@ -221,35 +224,22 @@ function valueIsNull(element) {
 
 async function modalSubmited() {
 
-    if (modalSerialNumber.value.length != 22) {
-        modalErrorField.textContent = "Verifique o campo Número de Serie, este campo deve conter exatos 22 caracteres";
-        return;
-    }
-    if (modalListedNumber.value.length != 7) {
-        modalErrorField.textContent = "Verifique o campo Número de Tombamento, este campo deve conter exatos 7 caracteres";
-        return;
-    }
-    if (modalLaptopModel.value == null) {
-        modalErrorField.textContent = "Verifique o campo Cor / Modelo.";
-        return;
-    }
     
     modalErrorField.textContent = "";
-    let object = {
-        serialNumber: modalSerialNumber.value,
-        listedNumber: modalListedNumber.value,
-        laptopModel: modalLaptopModel.value,
-    }
 
     try {
-        // Faz a solicitação POST para o servidor
-        const response = await fetch("http://localhost:8080/laptop", {
+        const response = await fetch("http://localhost:8080/link", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(object),
+            body: JSON.stringify(
+                {
+                    beneficiaryId: modalBeneficiary.value,
+                    laptopId: modalLaptop.value
+                }
+            ),
         });
 
         if (!response.ok) {
@@ -259,7 +249,7 @@ async function modalSubmited() {
         const data = await response.json();
         if (data) {
             closeModal();
-            clickSelectBtns(allBtn);
+            allBtn.click();
         }
     } catch (error) {
         console.error('Erro:', error.message);
@@ -280,6 +270,20 @@ function changeFormField() {
 }
 
 registerBtn.addEventListener("click", (() => {
+    avaliableEntitys.forEach(e => {
+        e[0].forEach(r => {
+            let opt = document.createElement("option");
+            opt.value = r.id;
+            opt.textContent = r.listedNumber;
+            modalLaptop.appendChild(opt);
+        })
+        e[1].forEach(r => {
+            let opt = document.createElement("option");
+            opt.value = r.id;
+            opt.textContent = r.name;
+            modalBeneficiary.appendChild(opt);
+        })
+    })
     registerFields.forEach(valueIsNull);
     registerModalBoot.show();
 }));

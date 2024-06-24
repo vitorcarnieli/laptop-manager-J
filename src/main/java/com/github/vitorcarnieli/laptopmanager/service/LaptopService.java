@@ -50,8 +50,7 @@ public class LaptopService extends BaseService<Laptop, LaptopDto> {
     } 
 
     public Object getAvailableLaptops() throws Exception {
-        System.out.println(this.findAll().stream().filter(b -> !b.isLinked()).toList());
-        return null;
+        return this.findAll().stream().filter(b -> !b.isLinked()).toList();
     }
 
 	
