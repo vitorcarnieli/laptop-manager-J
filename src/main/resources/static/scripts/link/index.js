@@ -43,20 +43,30 @@ selectBtns.forEach(btn => btn.addEventListener("click", (() => {
 allBtn.click();
 
 
-
 function buildPage() {
-  
-    deleteChildsOfCardScope();
+    return new Promise((resolve, reject) => {
+        deleteChildsOfCardScope();
 
-    getLinkData().then(e => {
-        appendCardToCardsLocal(filterLinks(searchField.value));
+        getLinkData()
+            .then(() => {
+                appendCardToCardsLocal(filterLinks(searchField.value));
+                resolve();
+            })
+            .catch(error => {
+                reject(error);
+            });
+
+        getAvaliableEntitys()
+            .then(r => {
+                avaliableEntitys.push(r);
+            })
+            .catch(error => {
+                console.error('Erro ao obter entidades disponíveis:', error);
+            });
     });
-
-    getAvaliableEntitys().then(r => {
-        avaliableEntitys.push(r);
-    });
-
 }
+
+
 
 function filterLinks(i) {
     if (filterSelected == "linkedless") {
@@ -74,7 +84,7 @@ function filterLinks(i) {
 
 
 function appendCardToCardsLocal(dataForCards) {
-
+    console.log(dataForCards);
     dataForCards.forEach(b => {
         cardLocal.appendChild(buildCard(b));
     });
@@ -99,28 +109,24 @@ function deleteChildsOfCardScope() {
     while (cardLocal.firstChild) {
         cardLocal.removeChild(cardLocal.firstChild);
     }
-    links = []
 }
+
 
 function getLinkData() {
     return fetch(`http://localhost:8080/link`)
         .then(responseRaw => responseRaw.json())
         .then(response => {
-            response.map(l => 
-                getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
-                    let obj = {
-                        id: l.id,
-                        name: r,
-                        isCurrent: l.current
-                    }
-                    links.push(obj)
-                })
-            );
+            links = response.map(l => ({
+                id: l.id,
+                name: l.name,
+                isCurrent: l.current
+            }));
         })
-        .catch(e => {
-            throw new Error("erro ao obter informaçoes");
+        .catch(error => {
+            throw new Error("Erro ao obter informações de link");
         });
 }
+
 
 function getAvaliableEntitys() {
     return getAvaliableBeneficiaries().then(rBeneficiaries => {
@@ -300,42 +306,70 @@ function changeFormField() {
 }
 
 [registerBtn, endingBtn].forEach(btn => {
-    btn.addEventListener("click", (() => {
-        btn.id == "register" ? openModalRegister : openModalEnd();
-    }));
-})
+    btn.addEventListener("click", () => {
+        btn.id == "register" ? openModalRegister() : prepareAndOpenModalEnd();
+    });
+});
 
 function openModalRegister() {
     avaliableEntitys.forEach(e => {
-        e[0].forEach(r => {
+        if (e[0].lenght < 1) {
+            e[0].forEach(r => {
+                let opt = document.createElement("option");
+                opt.value = r.id;
+                opt.textContent = r.listedNumber;
+                modalLaptop.appendChild(opt);
+            })
+        } else {
             let opt = document.createElement("option");
-            opt.value = r.id;
-            opt.textContent = r.listedNumber;
+            opt.textContent = "NENHUM NOTEBOOK DISPONÍVEL PARA VÍNCULO";
+            opt.disabled = true;
+            opt.classList = "text-danger";
             modalLaptop.appendChild(opt);
-        })
-        e[1].forEach(r => {
+        }
+        if (e[1].lenght < 1) {
+            e[1].forEach(r => {
+                let opt = document.createElement("option");
+                opt.value = r.id;
+                opt.textContent = r.name;
+                modalBeneficiary.appendChild(opt);
+            })
+        } else {
             let opt = document.createElement("option");
-            opt.value = r.id;
-            opt.textContent = r.name;
+            opt.textContent = "NENHUM BENEFICIÁRIO DISPONÍVEL PARA VÍNCULO";
+            opt.disabled = true;
+            opt.classList = "text-danger";
             modalBeneficiary.appendChild(opt);
-        })
+        }
+
     })
     registerFields.forEach(valueIsNull);
     registerModalBoot.show();
 }
 
-function openModalEnd() {   
-    links = []
-    getLinkData().then(r => {
-        links.forEach(l => { 
-            if (l.isCurrent) {
-                let opt = document.createElement("option");
-                opt.value = l.id;
-                opt.text = l.name;
-                endLinks.appendChild(opt);
-            }
+function prepareAndOpenModalEnd() {
+    buildPage()
+        .then(() => {
+            openModalEnd();
+        })
+        .catch(error => {
+            console.error('Erro ao preparar e abrir o modal de encerramento:', error);
         });
+}
+
+function openModalEnd() {
+
+    links.forEach(l => {
+        if (l.isCurrent) {
+            let opt = document.createElement("option");
+            opt.value = l.id;
+            opt.text = l.name;
+            endLinks.appendChild(opt);
+        }
     })
+    while (cardLocal.firstChild) {
+        cardLocal.removeChild(cardLocal.firstChild);
+    }
     endingModalBoot.show();
 }
 
@@ -358,6 +392,10 @@ registerBtn.addEventListener("click", (() => {
     registerModalBoot.show();
 }));
 modalClose.addEventListener("click", () => closeModal());
+modalCloseEnd.addEventListener("click", () =>  {
+    closeModal();
+    allBtn.click();
+} )
 modalSubmit.addEventListener("click", (() => modalSubmited()))
 registerFields.forEach((f) => {
     f.addEventListener("change", (() => changeFormField()));

@@ -17,6 +17,8 @@ public class Link extends BaseEntity {
 
 	private static final long serialVersionUID = -9076079988164514233L;
 
+    private String name;
+
 	@ManyToOne
 	@JoinColumn(name = "beneficiary_id")
 	@JsonIgnore
@@ -120,6 +122,14 @@ public class Link extends BaseEntity {
 	public void setLaptopId(Long laptopId) {
 		this.laptopId = laptopId;
 	}
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
 
     @Override
     public String toString() {

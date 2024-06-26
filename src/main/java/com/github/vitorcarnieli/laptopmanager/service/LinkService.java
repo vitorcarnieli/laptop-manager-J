@@ -35,6 +35,7 @@ public class LinkService extends BaseService<Link, LinkDto>{
 			Laptop laptop = laptopService.findById(dto.getLaptopId());
 			Beneficiary beneficiary = beneficiaryService.findById(dto.getBeneficiaryId());
 			Link link = new Link(laptop, beneficiary);
+            link.setName(laptop.getListedNumber() + " & " + beneficiary.getName());
 			return this.save(link);
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());

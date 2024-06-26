@@ -24,7 +24,8 @@ const registerFields = [modalSerialNumber, modalLaptopModel, modalListedNumber]
 searchField.addEventListener("input", (() => {buildPage()}));
 
 selectBtns.forEach(btn => btn.addEventListener("click", (() => {
-    btn.id == "register" ? () => {} : changeNavBtnSelected(btn);
+    console.log(btn);
+    btn.id === "register" ? () => {} : changeNavBtnSelected(btn);
 })));
 
 allBtn.click();
@@ -45,8 +46,11 @@ function filterBeneficiaries(i) {
         laptops = laptops.filter(b => b.linked);
     }
 
-    if (i != null || i.trim() != "" || i != undefined) {
+    if ((i != null || i.trim() != "" || i != undefined) && i[0] == "0") {
         return laptops.filter(b => b.listedNumber.includes(i));
+    }
+    if ((i != null || i.trim() != "" || i != undefined)) {
+        return laptops.filter(b => b.serialNumber.includes(i));
     }
 
     return laptops;
@@ -157,6 +161,11 @@ function createCardText(e) {
 }
 
 function changeNavBtnSelected(btn) {
+    console.log(btn.id === "register");
+    if (btn.id === "register") {
+        buildPage();
+        return;
+    }
     selectBtns.forEach(btn => btn.classList.remove("bg-select"));
     filterSelected = btn.id;
     btn.classList.add("bg-select");

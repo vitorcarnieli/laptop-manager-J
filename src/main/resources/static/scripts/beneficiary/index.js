@@ -47,7 +47,7 @@ function filterBeneficiaries(i) {
     }
 
     if (i != null || i.trim() != "" || i != undefined) {
-        return beneficiaries.filter(b => b.name.includes(i));
+        return beneficiaries.filter(b => b.name.toLowerCase().includes(i.toLowerCase()));
     }
 
     return beneficiaries;
@@ -159,9 +159,11 @@ function createCardText(e) {
 }
 
 function changeNavBtnSelected(btn) {
+
     selectBtns.forEach(btn => btn.classList.remove("bg-select"));
     filterSelected = btn.id;
-    btn.classList.add("bg-select");
+    console.log(btn);
+    btn.id == "register" ? () => {} : btn.classList.add("bg-select");
     buildPage();
 }
 
