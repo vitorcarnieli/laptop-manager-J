@@ -7,6 +7,7 @@ import com.github.vitorcarnieli.laptopmanager.domain.base.BaseEntity;
 import com.github.vitorcarnieli.laptopmanager.domain.laptop.Laptop;
 import com.github.vitorcarnieli.laptopmanager.domain.link.Link;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -18,8 +19,10 @@ public class Beneficiary extends BaseEntity {
 	
 	private String name;
 	
+    @Column(unique = true)
 	private String document;
 	
+    @Column(unique = true)
 	private String contactNumber;
 	
 	private ContractType contractType;

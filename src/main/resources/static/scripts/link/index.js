@@ -5,6 +5,7 @@ const allBtn = document.getElementById("all");
 const linkedBtn = document.getElementById("linked");
 const linkedlessBtn = document.getElementById("linkedless");
 const registerBtn = document.getElementById("register");
+const endingBtn = document.getElementById("ending")
 const searchField = document.getElementsByTagName("input")[0];
 var tarcisio = "gay";
 var links = [];
@@ -14,12 +15,23 @@ var filterSelected = "";
 
 const registerModal = document.getElementById("registerModal");
 const registerModalBoot = new bootstrap.Modal(registerModal);
+
+const endingModal = document.getElementById("endingModal");
+const endingModalBoot = new bootstrap.Modal(endingModal);
+
 const modalClose = document.getElementById("modalClose");
 const modalSubmit = document.getElementById("modalSubmit");
+
+const modalCloseEnd = document.getElementById("modalCloseEnd");
+const modalSubmitEnd = document.getElementById("modalSubmitEnd");
+
 const modalLaptop = document.getElementById("laptop");
 const modalBeneficiary = document.getElementById("beneficiary");
-const modalErrorField = document.getElementById("modalErrorField")
-const registerFields = [modalLaptop, modalBeneficiary]
+const modalErrorField = document.getElementById("modalErrorField");
+
+const registerFields = [modalLaptop, modalBeneficiary];
+
+const endLinks = document.getElementById("endLinks");
 // VARS
 
 searchField.addEventListener("input", (() => {buildPage()}));
@@ -209,6 +221,9 @@ function changeNavBtnSelected(btn) {
     buildPage();
     selectBtns.forEach(btn => btn.classList.remove("bg-select"));
     filterSelected = btn.id;
+    if (btn.id == "register" || btn.id == "ending") {
+        return;
+    }
     btn.classList.add("bg-select");
 }
 
@@ -216,9 +231,10 @@ function changeNavBtnSelected(btn) {
 // MANAGE MODAL
 
 function closeModal() {
-    registerModalBoot.hide();
+    [endingModalBoot, registerModalBoot].forEach(boot => boot.hide());
+    [modalSubmit, modalSubmitEnd].forEach(valueIsNull);
     registerFields.forEach(valueIsNull);
-    modalSubmit.classList.add("disabled");
+
     modalErrorField.textContent = "";
 }
 
@@ -272,6 +288,44 @@ function changeFormField() {
         }
     })
 }
+
+[registerBtn, endingBtn].forEach(btn => {
+    btn.addEventListener("click", (() => {
+        if (btn.id == "register") {
+            avaliableEntitys.forEach(e => {
+                e[0].forEach(r => {
+                    let opt = document.createElement("option");
+                    opt.value = r.id;
+                    opt.textContent = r.listedNumber;
+                    modalLaptop.appendChild(opt);
+                })
+                e[1].forEach(r => {
+                    let opt = document.createElement("option");
+                    opt.value = r.id;
+                    opt.textContent = r.name;
+                    modalBeneficiary.appendChild(opt);
+                })
+            })
+            registerFields.forEach(valueIsNull);
+            registerModalBoot.show();
+            return;
+        }
+        getLinkData().then(d => {
+            console.log(d);
+            links.forEach(l => {
+                if (l.isCurrent) {
+                    let opt = document.createElement("option");
+                    opt.value = l.id;
+                    getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
+                        opt.text = r;
+                    });
+                    endLinks.appendChild(opt);
+                }
+            });
+        });
+        endingModalBoot.show();
+    }));
+})
 
 registerBtn.addEventListener("click", (() => {
     avaliableEntitys.forEach(e => {
