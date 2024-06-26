@@ -34,10 +34,10 @@ const registerFields = [modalLaptop, modalBeneficiary];
 const endLinks = document.getElementById("endLinks");
 // VARS
 
-searchField.addEventListener("input", (() => {buildPage()}));
+searchField.addEventListener("input", (() => { buildPage() }));
 
 selectBtns.forEach(btn => btn.addEventListener("click", (() => {
-    btn.id == "register" ? () => {} : changeNavBtnSelected(btn);
+    btn.id == "register" ? () => { } : changeNavBtnSelected(btn);
 })));
 
 allBtn.click();
@@ -45,9 +45,9 @@ allBtn.click();
 
 
 function buildPage() {
-    
+  
     deleteChildsOfCardScope();
-    
+
     getLinkData().then(e => {
         appendCardToCardsLocal(filterLinks(searchField.value));
     });
@@ -76,9 +76,7 @@ function filterLinks(i) {
 function appendCardToCardsLocal(dataForCards) {
 
     dataForCards.forEach(b => {
-        console.log(b);
         cardLocal.appendChild(buildCard(b));
-        console.log(b + "2");
     });
 }
 
@@ -108,17 +106,16 @@ function getLinkData() {
     return fetch(`http://localhost:8080/link`)
         .then(responseRaw => responseRaw.json())
         .then(response => {
-            const promises = response.map(l => 
+            response.map(l => 
                 getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
                     let obj = {
                         id: l.id,
                         name: r,
                         isCurrent: l.current
                     }
-                    links.push(obj);
+                    links.push(obj)
                 })
             );
-            return Promise.all(promises);
         })
         .catch(e => {
             throw new Error("erro ao obter informaçoes");
@@ -128,35 +125,35 @@ function getLinkData() {
 function getAvaliableEntitys() {
     return getAvaliableBeneficiaries().then(rBeneficiaries => {
         return getAvaliableLaptops().then(rLaptops => {
-            return [rLaptops,rBeneficiaries];
+            return [rLaptops, rBeneficiaries];
         })
     })
 }
 
 function getAvaliableLaptops() {
     return fetch(`http://localhost:8080/laptop/getAvailableLaptops`)
-    .then(responseRaw => {
-        return responseRaw.json();
-    })
-    .then(response => {
-        return response;
-    })
-    .catch(e => {
-        throw new Error("erro ao obter informaçoes");
-    })
+        .then(responseRaw => {
+            return responseRaw.json();
+        })
+        .then(response => {
+            return response;
+        })
+        .catch(e => {
+            throw new Error("erro ao obter informaçoes");
+        })
 }
 
 function getAvaliableBeneficiaries() {
     return fetch(`http://localhost:8080/beneficiary/getAvailableBeneficiaries`)
-    .then(responseRaw => {
-        return responseRaw.json();
-    })
-    .then(response => {
-        return response;
-    })
-    .catch(e => {
-        throw new Error("erro ao obter informaçoes");
-    })
+        .then(responseRaw => {
+            return responseRaw.json();
+        })
+        .then(response => {
+            return response;
+        })
+        .catch(e => {
+            throw new Error("erro ao obter informaçoes");
+        })
 }
 
 function getBeneficiaryNameLaptopListedNumberByLinkId(id) {
@@ -165,7 +162,6 @@ function getBeneficiaryNameLaptopListedNumberByLinkId(id) {
             return responseRaw.text();
         })
         .then(response => {
-            console.log(response)
             return response;
         })
         .catch(e => {
@@ -205,7 +201,6 @@ function createCardTitle(name) {
 function createCardText(e) {
     let cardText = document.createElement("p");
     cardText.classList.add("card-text");
-    console.log(e)
 
 
     if (!e.isCurrent) {
@@ -228,11 +223,26 @@ function changeNavBtnSelected(btn) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // MANAGE MODAL
 
+//fecha modal
 function closeModal() {
     [endingModalBoot, registerModalBoot].forEach(boot => boot.hide());
     [modalSubmit, modalSubmitEnd].forEach(valueIsNull);
+
     registerFields.forEach(valueIsNull);
 
     modalErrorField.textContent = "";
@@ -244,7 +254,7 @@ function valueIsNull(element) {
 
 async function modalSubmited() {
 
-    
+
     modalErrorField.textContent = "";
 
     try {
@@ -291,41 +301,43 @@ function changeFormField() {
 
 [registerBtn, endingBtn].forEach(btn => {
     btn.addEventListener("click", (() => {
-        if (btn.id == "register") {
-            avaliableEntitys.forEach(e => {
-                e[0].forEach(r => {
-                    let opt = document.createElement("option");
-                    opt.value = r.id;
-                    opt.textContent = r.listedNumber;
-                    modalLaptop.appendChild(opt);
-                })
-                e[1].forEach(r => {
-                    let opt = document.createElement("option");
-                    opt.value = r.id;
-                    opt.textContent = r.name;
-                    modalBeneficiary.appendChild(opt);
-                })
-            })
-            registerFields.forEach(valueIsNull);
-            registerModalBoot.show();
-            return;
-        }
-        getLinkData().then(d => {
-            console.log(d);
-            links.forEach(l => {
-                if (l.isCurrent) {
-                    let opt = document.createElement("option");
-                    opt.value = l.id;
-                    getBeneficiaryNameLaptopListedNumberByLinkId(l.id).then(r => {
-                        opt.text = r;
-                    });
-                    endLinks.appendChild(opt);
-                }
-            });
-        });
-        endingModalBoot.show();
+        btn.id == "register" ? openModalRegister : openModalEnd();
     }));
 })
+
+function openModalRegister() {
+    avaliableEntitys.forEach(e => {
+        e[0].forEach(r => {
+            let opt = document.createElement("option");
+            opt.value = r.id;
+            opt.textContent = r.listedNumber;
+            modalLaptop.appendChild(opt);
+        })
+        e[1].forEach(r => {
+            let opt = document.createElement("option");
+            opt.value = r.id;
+            opt.textContent = r.name;
+            modalBeneficiary.appendChild(opt);
+        })
+    })
+    registerFields.forEach(valueIsNull);
+    registerModalBoot.show();
+}
+
+function openModalEnd() {   
+    links = []
+    getLinkData().then(r => {
+        links.forEach(l => { 
+            if (l.isCurrent) {
+                let opt = document.createElement("option");
+                opt.value = l.id;
+                opt.text = l.name;
+                endLinks.appendChild(opt);
+            }
+        });
+    })
+    endingModalBoot.show();
+}
 
 registerBtn.addEventListener("click", (() => {
     avaliableEntitys.forEach(e => {
@@ -352,6 +364,35 @@ registerFields.forEach((f) => {
 })
 
 // MANAGE MODAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // MANAGE SELECT BTNS
