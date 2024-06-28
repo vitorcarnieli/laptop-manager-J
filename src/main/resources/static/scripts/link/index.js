@@ -7,7 +7,7 @@ const linkedlessBtn = document.getElementById("linkedless");
 const registerBtn = document.getElementById("register");
 const endingBtn = document.getElementById("ending")
 const searchField = document.getElementsByTagName("input")[0];
-var tarcisio = "gay";
+const datesField = document.getElementById("date");
 var links = [];
 var avaliableEntitys = [];
 
@@ -293,15 +293,11 @@ function modalSubmited() {
             ),
         });
 
-        if (!response.ok) {
-            throw new Error('Erro ao enviar os dados');
-        }
-
-        const data = response.json();
-        if (data) {
+        response.then(r => {
             closeModal();
             allBtn.click();
-        }
+        })
+
     } catch (error) {
         console.error('Erro:', error.message);
     }
@@ -327,6 +323,21 @@ function changeFormField() {
 });
 
 function openModalRegister() {
+    while (datesField.firstChild) {
+        datesField.removeChild(datesField.firstChild);
+    }
+    for (let index = 2021; index <= new Date().getFullYear(); index++) {
+        let opt = document.createElement("option");
+        opt.value = index;
+        if (new Date().getFullYear() == index) {
+            opt.textContent = "Atual";
+            datesField.appendChild(opt);
+            opt.selected = true;    
+            continue;
+        }
+        opt.textContent = index
+        datesField.appendChild(opt)        
+    }
     avaliableEntitys.forEach(e => {
         if (e[0].lenght < 1) {
             e[0].forEach(r => {

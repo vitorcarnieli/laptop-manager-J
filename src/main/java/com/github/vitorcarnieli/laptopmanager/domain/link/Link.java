@@ -46,7 +46,7 @@ public class Link extends BaseEntity {
 		super();
 	}
 	
-	public Link(Laptop laptop, Beneficiary beneficiary) {
+	public Link(Laptop laptop, Beneficiary beneficiary, Date date) {
 		setLaptop(laptop);
 		setBeneficiary(beneficiary);
 		setInitDate(new Date());

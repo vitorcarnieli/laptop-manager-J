@@ -49,7 +49,7 @@ public class Laptop extends BaseEntity {
 	}
 
 	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+		this.serialNumber = serialNumber.trim();
 	}
 
 	public String getListedNumber() {
@@ -57,7 +57,7 @@ public class Laptop extends BaseEntity {
 	}
 
 	public void setListedNumber(String listedNumber) {
-		this.listedNumber = listedNumber;
+		this.listedNumber = listedNumber.trim();
 	}
 
 	public List<Link> getLinks() {

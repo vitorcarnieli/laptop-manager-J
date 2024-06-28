@@ -210,7 +210,7 @@ async function modalSubmited() {
     
     modalErrorField.textContent = "";
     let object = {
-        serialNumber: modalSerialNumber.value,
+        serialNumber: modalSerialNumber.value.toUpperCase(),
         listedNumber: modalListedNumber.value,
         laptopModel: modalLaptopModel.value,
     }

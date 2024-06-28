@@ -58,7 +58,7 @@ public class Beneficiary extends BaseEntity {
 	}
 
 	public void setDocument(String document) {
-		this.document = document;
+		this.document = document.trim();
 	}
 
 	public String getContactNumber() {
@@ -66,7 +66,7 @@ public class Beneficiary extends BaseEntity {
 	}
 
 	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
+		this.contactNumber = contactNumber.trim();
 	}
 
 	public ContractType getContractType() {
