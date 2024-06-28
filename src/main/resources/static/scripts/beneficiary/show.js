@@ -16,6 +16,7 @@ function buildPage() {
 
 function defInfos() {
     getBeneficiaryData().then(b => {
+        document.title = "Beneficiário - " + b.name;
         beneficiaryNameTitle.textContent = b.name;
         beneficiaryName.value = b.name;
         beneficiaryDocument.value = b.document.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');;

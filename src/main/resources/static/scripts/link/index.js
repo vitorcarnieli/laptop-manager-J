@@ -84,13 +84,28 @@ function filterLinks(i) {
 
 
 function appendCardToCardsLocal(dataForCards) {
-    console.log(dataForCards);
+
+
+    if (dataForCards[0] == null) {
+        let nonFind = document.createElement("div");
+        nonFind.textContent = "Nenhuma entidade encontrada usando os filtros aplicados";
+        nonFind.classList = "text-center text-danger";
+        cardLocal.appendChild(nonFind);
+        return
+    }
     dataForCards.forEach(b => {
         cardLocal.appendChild(buildCard(b));
     });
 }
 
 function buildCard(e) {
+
+    if (e.lenght < 1) {
+        let nonFind = document.createElement("div");
+        nonFind.textContent = "Nenhuma entidade encontrada usando os filtros aplicados";
+        nonFind.classList = "text-center text-danger";
+        return nonFind
+    }
 
     let scope = createCardScope(e.id);
     let body = createCardBody();
@@ -118,7 +133,7 @@ function getLinkData() {
         .then(response => {
             links = response.map(l => ({
                 id: l.id,
-                name: l.name,
+                name: `${l.name.split(" ")[0].slice(0, 2)}-${l.name.split(" ")[0].slice(2,7)} & ${l.name.split(" ")[2]} `,
                 isCurrent: l.current
             }));
         })
@@ -199,7 +214,7 @@ function createCardBody() {
 
 function createCardTitle(name) {
     let cardTitle = document.createElement("h5");
-    cardTitle.classList.add("card-title");
+    cardTitle.classList = "card-title text-center";
     cardTitle.textContent = name;
     return cardTitle;
 }
@@ -258,13 +273,13 @@ function valueIsNull(element) {
     element.value = null;
 }
 
-async function modalSubmited() {
+function modalSubmited() {
 
 
     modalErrorField.textContent = "";
 
     try {
-        const response = await fetch("http://localhost:8080/link", {
+        const response = fetch("http://localhost:8080/link", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -282,7 +297,7 @@ async function modalSubmited() {
             throw new Error('Erro ao enviar os dados');
         }
 
-        const data = await response.json();
+        const data = response.json();
         if (data) {
             closeModal();
             allBtn.click();

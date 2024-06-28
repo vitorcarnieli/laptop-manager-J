@@ -18,7 +18,7 @@ function defInfos() {
     getLaptopData()
     .then(l => {
         let laptopListedNumber = l.listedNumber;
-
+        document.title = "Notebook - " + formatLaptopListedNumber(laptopListedNumber)
         laptopNameTitleField.textContent = formatLaptopListedNumber(laptopListedNumber);
         laptopListedNumberField.value = formatLaptopListedNumber(laptopListedNumber);
         laptopSerialNumberField.value = l.serialNumber;

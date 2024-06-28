@@ -55,6 +55,13 @@ function filterBeneficiaries(i) {
 
 
 function appendCardToCardsLocal(dataForCards) {
+    if (dataForCards[0] == null) {
+        let nonFind = document.createElement("div");
+        nonFind.textContent = "Nenhuma entidade encontrada usando os filtros aplicados";
+        nonFind.classList = "text-center text-danger";
+        cardLocal.appendChild(nonFind);
+        return
+    }
     dataForCards.forEach(b => cardLocal.appendChild(buildCard(b)));
 }
 
@@ -130,7 +137,7 @@ function createCardBody() {
 
 function createCardTitle(name) {
     let cardTitle = document.createElement("h5");
-    cardTitle.classList.add("card-title");
+    cardTitle.classList = "card-title text-center";
     let splitedName = name.split(" ");
     cardTitle.textContent = `${splitedName[0]} ${splitedName.pop()[0]}.`;
     return cardTitle;
@@ -207,7 +214,7 @@ async function modalSubmited() {
     }
     modalErrorField.textContent = "";
     let object = {
-        name: modalName.value,
+        name: modalName.value[0] == " " ? modalName.value.substring(0) : modalName.value ,
         document: modalIdentificationDocument.value,
         contactNumber: modalContactNumber.value,
         contractType: modalContractType.value

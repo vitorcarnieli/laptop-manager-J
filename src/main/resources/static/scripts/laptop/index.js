@@ -58,6 +58,13 @@ function filterBeneficiaries(i) {
 
 
 function appendCardToCardsLocal(dataForCards) {
+    if (dataForCards[0] == null) {
+        let nonFind = document.createElement("div");
+        nonFind.textContent = "Nenhuma entidade encontrada usando os filtros aplicados";
+        nonFind.classList = "text-center text-danger";
+        cardLocal.appendChild(nonFind);
+        return
+    }
     dataForCards.forEach(b => cardLocal.appendChild(buildCard(b)));
 }
 
@@ -133,7 +140,7 @@ function createCardBody() {
 
 function createCardTitle(name) {
     let cardTitle = document.createElement("h5");
-    cardTitle.classList.add("card-title");
+    cardTitle.classList = "card-title text-center";
     cardTitle.textContent = name.slice(0, 2) + "-" + name.slice(2);; 
     return cardTitle;
 }
